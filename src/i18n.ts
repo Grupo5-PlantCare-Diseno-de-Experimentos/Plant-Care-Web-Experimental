@@ -58,6 +58,18 @@ const messages = {
         title: 'Idioma',
         description: 'Selecciona tu idioma preferido.'
       },
+      discord: {
+        title: 'Alertas de Discord',
+        description: 'Vincula un canal de Discord para recibir alertas de riego crítico fuera de la app.',
+        placeholder: 'https://discord.com/api/webhooks/...',
+        link: 'Vincular Canal',
+        linked: 'Canal vinculado',
+        unlink: 'Desvincular',
+        invalid: 'La URL del webhook de Discord no es válida.',
+        linkedToast: 'Canal de Discord vinculado. Revisa el mensaje de confirmación.',
+        unlinkedToast: 'Canal de Discord desvinculado.',
+        errorToast: 'No se pudo vincular el canal. Intenta de nuevo.'
+      },
       notifications: {
         title: 'Notificaciones',
         watering: {
@@ -524,7 +536,24 @@ const messages = {
         cancel: 'Cancelar',
         saveChanges: 'Guardar cambios'
       },
-      emptyAchievements: 'Aun no hay logros. Sigue regando tus plantas! 🌱'
+      emptyAchievements: 'Aun no hay logros. Sigue regando tus plantas! 🌱',
+      achievementsList: {
+        firstPlant: { title: 'Primera planta', desc: 'Agregaste tu primera planta a la app' },
+        collector: { title: 'Coleccionista', desc: 'Registraste 5 o más plantas' },
+        hydrationHero: { title: 'Héroe de la hidratación', desc: 'Completaste 10 sesiones de riego' },
+        consistentCarer: { title: 'Cuidador constante', desc: 'Completaste 50 sesiones de riego' },
+        healthyStreak: { title: 'Racha saludable', desc: 'Todas tus plantas están saludables' },
+        expertCaretaker: { title: 'Cuidador Experto', desc: '7 días consecutivos sin alertas críticas en ninguna planta' }
+      },
+      expertBadge: {
+        earnedOn: 'Conseguida el {date}',
+        lockedHint: 'Mantén todas tus plantas sin alertas críticas durante 7 días.',
+        progress: '{days} de 7 días'
+      },
+      achievementUnlocked: {
+        title: '¡Logro desbloqueado!',
+        detail: '{title}'
+      }
     },
     completeProfile: {
       eyebrow: 'Bienvenido a PlantCare',
@@ -546,6 +575,23 @@ const messages = {
         completed: 'Perfil completado. Redirigiendo...',
         error: 'Error',
         failed: 'No se pudo actualizar el perfil'
+      }
+    },
+    premium: {
+      cta: 'Ver Planes Premium',
+      modal: {
+        eyebrow: 'PlantCare Premium',
+        title: 'Desbloquea PlantCare Premium',
+        subtitle: 'Lleva el cuidado de tus plantas al siguiente nivel.',
+        benefitDiagnosis: 'Diagnóstico avanzado de salud basado en tu historial',
+        benefitRetention: 'Retención de métricas históricas por 24 meses',
+        benefitSupport: 'Soporte prioritario y recomendaciones personalizadas',
+        price: '$4.99',
+        period: '/ mes',
+        startTrial: 'Comenzar Prueba de 14 Días',
+        disclaimer: 'Prueba simulada: no se solicita ni se cobra ningún medio de pago.',
+        thanksTitle: '¡Gracias por tu interés!',
+        thanksBody: 'Registramos tu preferencia. Esta característica estará disponible en la próxima versión, sin cobros reales.'
       }
     },
     watering: {
@@ -657,6 +703,18 @@ const messages = {
       language: {
         title: 'Language',
         description: 'Select your preferred language.'
+      },
+      discord: {
+        title: 'Discord Alerts',
+        description: 'Link a Discord channel to receive critical watering alerts outside the app.',
+        placeholder: 'https://discord.com/api/webhooks/...',
+        link: 'Link Channel',
+        linked: 'Channel linked',
+        unlink: 'Unlink',
+        invalid: 'The Discord webhook URL is not valid.',
+        linkedToast: 'Discord channel linked. Check the confirmation message.',
+        unlinkedToast: 'Discord channel unlinked.',
+        errorToast: 'Could not link the channel. Please try again.'
       },
       notifications: {
         title: 'Notifications',
@@ -1124,7 +1182,24 @@ const messages = {
         cancel: 'Cancel',
         saveChanges: 'Save Changes'
       },
-      emptyAchievements: 'No achievements yet. Keep watering your plants! 🌱'
+      emptyAchievements: 'No achievements yet. Keep watering your plants! 🌱',
+      achievementsList: {
+        firstPlant: { title: 'First Plant', desc: 'You added your first plant to the app' },
+        collector: { title: 'Collector', desc: 'You registered 5 or more plants' },
+        hydrationHero: { title: 'Hydration Hero', desc: 'You completed 10 watering sessions' },
+        consistentCarer: { title: 'Consistent Carer', desc: 'You completed 50 watering sessions' },
+        healthyStreak: { title: 'Healthy Streak', desc: 'All your plants are healthy' },
+        expertCaretaker: { title: 'Expert Caretaker', desc: '7 consecutive days with no critical alerts on any plant' }
+      },
+      expertBadge: {
+        earnedOn: 'Earned on {date}',
+        lockedHint: 'Keep all your plants free of critical alerts for 7 days.',
+        progress: '{days} of 7 days'
+      },
+      achievementUnlocked: {
+        title: 'Achievement unlocked!',
+        detail: '{title}'
+      }
     },
     completeProfile: {
       eyebrow: 'Welcome to PlantCare',
@@ -1146,6 +1221,23 @@ const messages = {
         completed: 'Profile completed! Redirecting...',
         error: 'Error',
         failed: 'Failed to update profile'
+      }
+    },
+    premium: {
+      cta: 'View Premium Plans',
+      modal: {
+        eyebrow: 'PlantCare Premium',
+        title: 'Unlock PlantCare Premium',
+        subtitle: 'Take your plant care to the next level.',
+        benefitDiagnosis: 'Advanced health diagnostics based on your history',
+        benefitRetention: 'Historical metrics retention for 24 months',
+        benefitSupport: 'Priority support and personalized recommendations',
+        price: '$4.99',
+        period: '/ month',
+        startTrial: 'Start 14-Day Trial',
+        disclaimer: 'Simulated trial: no payment method is requested or charged.',
+        thanksTitle: 'Thanks for your interest!',
+        thanksBody: 'We recorded your preference. This feature will be available in the next release, with no real charges.'
       }
     },
     watering: {

@@ -7,6 +7,7 @@ import type { Plant } from '../../../plants/domain/model/plants.entity';
 import type { SensorData } from '../../../analytics/domain/model/analytics.entity';
 import { supabase } from '../../../utils/supabase';
 import { i18n } from '../../../i18n';
+import { trackingService } from '../../../experiments/tracking/tracking.service';
 
 // Interfaces for dashboard data
 interface Stat {
@@ -185,6 +186,8 @@ export function useDashboard() {
 
   onMounted(async () => {
     await authStore.initialize();
+    // Métrica primaria de la Hipótesis 5: frecuencia de visitas semanales al panel.
+    trackingService.track({ eventName: 'dashboard_view', location: 'dashboard' });
     fetchDashboardData();
   });
 

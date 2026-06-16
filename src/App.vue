@@ -34,15 +34,21 @@
         </transition>
       </router-view>
     </div>
+    <!-- Notificaciones emergentes globales (logros de gamificación, etc.) -->
+    <Toast position="top-right" />
   </div>
 </template>
 
 <script setup lang="ts">
 import Header from "./shared/presentation/components/Header.vue";
 import Sidebar from "./shared/presentation/components/Sidebar.vue";
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 import { useRoute } from 'vue-router';
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useAuthStore } from './auth/store/authStore';
+import { useProfileStore } from './Profile/application/profile.store';
 
 import { injectSpeedInsights } from "@vercel/speed-insights";
 
@@ -51,6 +57,37 @@ const route = useRoute();
 const isSidebarOpen = ref(true);
 const isMobile = ref(false);
 const { t } = useI18n();
+const toast = useToast();
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+
+// Carga los logros al iniciar sesión para detectar desbloqueos en cualquier vista.
+watch(
+  () => authStore.isSignedIn,
+  (signedIn) => {
+    if (signedIn) profileStore.fetchAchievements();
+  },
+  { immediate: true }
+);
+
+// Emite una notificación emergente por cada logro recién desbloqueado.
+watch(
+  () => profileStore.newAchievements,
+  (achievements) => {
+    if (!achievements.length) return;
+    for (const ach of achievements) {
+      const title = ach.titleKey ? t(ach.titleKey) : ach.title;
+      toast.add({
+        severity: 'success',
+        summary: `${ach.icon || '🏆'} ${t('profile.achievementUnlocked.title')}`,
+        detail: t('profile.achievementUnlocked.detail', { title }),
+        life: 5000,
+      });
+    }
+    profileStore.clearNewAchievements();
+  },
+  { deep: true }
+);
 
 const handleMenu = () => {
   isSidebarOpen.value = !isSidebarOpen.value;

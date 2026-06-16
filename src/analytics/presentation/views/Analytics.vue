@@ -11,6 +11,7 @@ import { useI18n } from 'vue-i18n'
 import AnalyticsHeader from '../components/AnalyticsHeader.vue'
 import AnalyticsStatsGrid from '../components/AnalyticsStatsGrid.vue'
 import MetricAreaChart from '../components/MetricAreaChart.vue'
+import PremiumPromo from '../../../experiments/premium/PremiumPromo.vue'
 
 // interface Summary {
 //   avgTemperature: number
@@ -302,9 +303,13 @@ onMounted(async () => {
             <h3 class="an-chart-title">{{ t('analytics.charts.historicalTitle') }}</h3>
             <p class="an-chart-sub">{{ t('analytics.charts.historicalSub') }}</p>
           </div>
-          <button class="an-refresh-btn" @click="loadHistoricalData" :class="{ 'an-refresh-btn--loading': loadingHistory }">
-            <i class="pi pi-refresh"></i> {{ t('analytics.charts.refresh') }}
-          </button>
+          <div class="an-hist-actions">
+            <!-- Premium promo (EC-02 · panel de historial / retención 24m) -->
+            <PremiumPromo feature="premium_history" />
+            <button class="an-refresh-btn" @click="loadHistoricalData" :class="{ 'an-refresh-btn--loading': loadingHistory }">
+              <i class="pi pi-refresh"></i> {{ t('analytics.charts.refresh') }}
+            </button>
+          </div>
         </div>
 
         <div class="an-hist-grid">
@@ -371,4 +376,11 @@ onMounted(async () => {
 
 <style>
 @import './analytics.css';
+
+.an-hist-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 </style>

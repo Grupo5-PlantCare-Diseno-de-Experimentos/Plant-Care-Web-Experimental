@@ -5,7 +5,13 @@ import type {
 	AvatarUploadResponse,
 	UserStats,
 	AchievementsResponse,
+	UserAchievement,
 } from '../model/profile.entity';
+import {
+	computeExpertCaretakerStreak,
+	EXPERT_ACHIEVEMENT_ID,
+	EXPERT_STREAK_DAYS,
+} from '../../experiments/gamification/expert-caretaker';
 
 type AuthenticatedUser = {
 	id: string;
@@ -164,20 +170,130 @@ class ProfileService {
 		return this.calculateStats(userId);
 	}
 
+	/**
+	 * Sistema de gamificación (Capítulo VIII): calcula logros desbloqueables a
+	 * partir de los datos reales del usuario (plantas, sesiones de riego y rachas
+	 * de salud), sin requerir una tabla adicional.
+	 */
 	async getAchievements(): Promise<AchievementsResponse> {
-		// Mock achievements since there's no table for it yet
+		const user = await this.getAuthenticatedUser();
+		const stats = await this.calculateStats(user.id);
+		const now = new Date().toISOString();
+
+		const definitions: Array<{
+			id: string;
+			titleKey: string;
+			descKey: string;
+			icon: string;
+			unlocked: boolean;
+		}> = [
+			{
+				id: 'first_plant',
+				titleKey: 'profile.achievementsList.firstPlant.title',
+				descKey: 'profile.achievementsList.firstPlant.desc',
+				icon: '🌱',
+				unlocked: stats.totalPlants >= 1,
+			},
+			{
+				id: 'plant_collector',
+				titleKey: 'profile.achievementsList.collector.title',
+				descKey: 'profile.achievementsList.collector.desc',
+				icon: '🪴',
+				unlocked: stats.totalPlants >= 5,
+			},
+			{
+				id: 'hydration_hero',
+				titleKey: 'profile.achievementsList.hydrationHero.title',
+				descKey: 'profile.achievementsList.hydrationHero.desc',
+				icon: '💧',
+				unlocked: stats.wateringSessions >= 10,
+			},
+			{
+				id: 'consistent_carer',
+				titleKey: 'profile.achievementsList.consistentCarer.title',
+				descKey: 'profile.achievementsList.consistentCarer.desc',
+				icon: '🏅',
+				unlocked: stats.wateringSessions >= 50,
+			},
+			{
+				id: 'healthy_streak',
+				titleKey: 'profile.achievementsList.healthyStreak.title',
+				descKey: 'profile.achievementsList.healthyStreak.desc',
+				icon: '🌟',
+				unlocked: stats.totalPlants > 0 && stats.successRate === 100,
+			},
+		];
+
+		const achievements: UserAchievement[] = definitions.map((d) => ({
+			id: d.id,
+			title: d.id,
+			description: '',
+			titleKey: d.titleKey,
+			descKey: d.descKey,
+			icon: d.icon,
+			earnedDate: d.unlocked ? now : null,
+			status: (d.unlocked ? 'unlocked' : 'locked') as 'unlocked' | 'locked',
+		}));
+
+		// Insignia destacada "Cuidador Experto" (Hipótesis 5 — racha de 7 días).
+		const expertBadge = await this.computeExpertCaretakerBadge(user.id);
+		return { achievements: [expertBadge, ...achievements] };
+	}
+
+	/**
+	 * Calcula la insignia destacada "Cuidador Experto" y persiste su desbloqueo
+	 * la primera vez que se cumple la racha (para conservar la fecha real).
+	 */
+	private async computeExpertCaretakerBadge(userId: string): Promise<UserAchievement> {
+		const { streakDays, unlocked } = await computeExpertCaretakerStreak(userId);
+
+		let earnedDate = await this.getPersistedUnlock(userId, EXPERT_ACHIEVEMENT_ID);
+		if (unlocked && !earnedDate) {
+			earnedDate = await this.persistUnlock(userId, EXPERT_ACHIEVEMENT_ID);
+		}
+
+		const isUnlocked = unlocked || earnedDate !== null;
+
 		return {
-			achievements: [
-				{
-					id: '1',
-					title: 'First Plant',
-					description: 'Added your first plant to the app',
-					icon: 'pi pi-star',
-					earnedDate: new Date().toISOString(),
-					status: 'unlocked'
-				}
-			]
+			id: EXPERT_ACHIEVEMENT_ID,
+			title: EXPERT_ACHIEVEMENT_ID,
+			description: '',
+			titleKey: 'profile.achievementsList.expertCaretaker.title',
+			descKey: 'profile.achievementsList.expertCaretaker.desc',
+			icon: '🏆',
+			earnedDate,
+			status: isUnlocked ? 'unlocked' : 'locked',
+			featured: true,
+			progress: Math.min(streakDays / EXPERT_STREAK_DAYS, 1),
 		};
+	}
+
+	/** Lee la fecha de desbloqueo persistida de un logro, o null. */
+	private async getPersistedUnlock(userId: string, achievementId: string): Promise<string | null> {
+		const { data, error } = await supabase
+			.from('user_achievements')
+			.select('unlocked_at')
+			.eq('user_id', userId)
+			.eq('achievement_id', achievementId)
+			.maybeSingle();
+
+		if (error) return null;
+		return (data?.unlocked_at as string | null) ?? null;
+	}
+
+	/** Persiste el desbloqueo de un logro y devuelve su timestamp. */
+	private async persistUnlock(userId: string, achievementId: string): Promise<string> {
+		const unlockedAt = new Date().toISOString();
+		const { error } = await supabase
+			.from('user_achievements')
+			.upsert(
+				{ user_id: userId, achievement_id: achievementId, unlocked_at: unlockedAt },
+				{ onConflict: 'user_id,achievement_id', ignoreDuplicates: true }
+			);
+
+		// Si falla la persistencia, devolvemos igualmente la fecha calculada.
+		if (error) console.warn('[Achievements] No se pudo persistir el desbloqueo:', error.message);
+		return unlockedAt;
 	}
 
 	async createProfile(userId: string): Promise<UserProfile> {

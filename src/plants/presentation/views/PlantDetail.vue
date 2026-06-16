@@ -13,6 +13,8 @@ import { useAuthStore } from '../../../auth/store/authStore';
 import type { Metric, Plant as PlantEntity } from '../../domain/model/plants.entity';
 import type { SensorData } from '../../../analytics/domain/model/analytics.entity';
 import { useI18n } from 'vue-i18n';
+import PremiumPromo from '../../../experiments/premium/PremiumPromo.vue';
+import { evaluateCriticalAlert, resetAlertState } from '../../../experiments/discord/discord-alerts';
 
 const router = useRouter();
 const route = useRoute();
@@ -37,6 +39,8 @@ onMounted(async () => {
     ]);
     plant.value = plantResponse.data;
     generalMetrics.value = metricsResponse.data;
+    // EC-01: evalúa si la última lectura dispara una alerta crítica a Discord.
+    void evaluateAlert();
   } catch (err) {
     console.error('Error loading data:', err);
     plant.value = null;
@@ -44,6 +48,17 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
+
+/** Evalúa la última métrica y dispara la alerta de Discord si corresponde. */
+async function evaluateAlert() {
+  if (!plant.value) return;
+  await evaluateCriticalAlert({
+    plantId: plant.value.id,
+    plantName: plant.value.name,
+    soilMoisturePct: latestMetric.value?.soilMoisturePct ?? null,
+    temperatureC: latestMetric.value?.airTemperatureC ?? null,
+  });
+}
 
 type MetricSource = Metric | SensorData | Record<string, unknown>;
 
@@ -100,6 +115,8 @@ const waterPlant = async () => {
       authStore.userId || plant.value.userId
     );
     plant.value = response.data;
+    // EC-01: el riego restablece el estado de alerta para permitir futuras notificaciones.
+    resetAlertState(plant.value.id);
     toast.add({ severity: 'success', summary: t('plantDetail.toast.success'), detail: t('plantDetail.toast.waterSuccess'), life: 3000 });
   } catch (err) {
     console.error('Error watering plant:', err);
@@ -262,6 +279,11 @@ function formatDate(dateStr: string | null): string {
               </div>
             </div>
 
+          </div>
+
+          <!-- ── Premium promo (EC-02 · panel de diagnóstico de salud) ── -->
+          <div class="pd-premium-row">
+            <PremiumPromo feature="premium_health" />
           </div>
 
           <!-- ── Watering Panel ── -->
@@ -728,6 +750,12 @@ function formatDate(dateStr: string | null): string {
   color: var(--text-secondary);
   letter-spacing: 0;
   margin-left: 2px;
+}
+
+/* ── Premium promo row ── */
+.pd-premium-row {
+  display: flex;
+  justify-content: center;
 }
 
 /* ═══════════════════════════════════════════

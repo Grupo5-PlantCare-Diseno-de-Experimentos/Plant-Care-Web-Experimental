@@ -67,13 +67,30 @@ const stats = computed<Stats[]>(() => {
 });
 
 const recentAchievements = computed(() => {
-  return profileStore.achievements.map(a => ({
-    icon: a.icon || '🏆',
-    title: a.title,
-    description: a.description,
-    date: a.earnedDate ? new Date(a.earnedDate).toLocaleDateString(locale.value) : '—',
-    status: a.status
-  }));
+  return profileStore.achievements
+    .filter(a => a.status === 'unlocked' && !a.featured)
+    .map(a => ({
+      icon: a.icon || '🏆',
+      title: a.titleKey ? t(a.titleKey) : a.title,
+      description: a.descKey ? t(a.descKey) : a.description,
+      date: a.earnedDate ? new Date(a.earnedDate).toLocaleDateString(locale.value) : '—',
+      status: a.status
+    }));
+});
+
+// Insignia destacada "Cuidador Experto" (Hipótesis 5).
+const expertBadge = computed(() => {
+  const badge = profileStore.achievements.find(a => a.featured);
+  if (!badge) return null;
+  return {
+    title: badge.titleKey ? t(badge.titleKey) : badge.title,
+    description: badge.descKey ? t(badge.descKey) : badge.description,
+    icon: badge.icon || '🏆',
+    unlocked: badge.status === 'unlocked',
+    progress: badge.progress ?? 0,
+    streakDays: Math.round((badge.progress ?? 0) * 7),
+    date: badge.earnedDate ? new Date(badge.earnedDate).toLocaleDateString(locale.value) : null,
+  };
 });
 
 watch(
@@ -267,6 +284,32 @@ const handleChangeAvatar = () => {
           <p class="pp-section-eye">{{ t('profile.section.milestones') }}</p>
           <h2 class="pp-section-title">{{ t('profile.section.achievements') }}</h2>
 
+          <!-- Insignia destacada: Cuidador Experto (Hipótesis 5) -->
+          <div
+            v-if="expertBadge"
+            class="pp-expert"
+            :class="{ 'pp-expert--locked': !expertBadge.unlocked }"
+          >
+            <div class="pp-expert-icon">{{ expertBadge.icon }}</div>
+            <div class="pp-expert-body">
+              <p class="pp-expert-title">{{ expertBadge.title }}</p>
+              <p class="pp-expert-desc">{{ expertBadge.description }}</p>
+
+              <p v-if="expertBadge.unlocked && expertBadge.date" class="pp-expert-meta">
+                {{ t('profile.expertBadge.earnedOn', { date: expertBadge.date }) }}
+              </p>
+              <template v-else>
+                <div class="pp-expert-progress">
+                  <div class="pp-expert-progress__bar" :style="{ width: `${expertBadge.progress * 100}%` }"></div>
+                </div>
+                <p class="pp-expert-meta">
+                  {{ t('profile.expertBadge.progress', { days: expertBadge.streakDays }) }} ·
+                  {{ t('profile.expertBadge.lockedHint') }}
+                </p>
+              </template>
+            </div>
+          </div>
+
           <div v-if="recentAchievements.length > 0" class="pp-ach-list">
             <div
               v-for="(ach, i) in recentAchievements"
@@ -286,7 +329,7 @@ const handleChangeAvatar = () => {
             </div>
           </div>
 
-          <div v-else class="pp-empty">
+          <div v-else-if="!expertBadge" class="pp-empty">
             <p>{{ t('profile.emptyAchievements') }}</p>
           </div>
         </div>
@@ -643,6 +686,72 @@ const handleChangeAvatar = () => {
 }
 
 /* Achievements */
+/* ── Insignia destacada: Cuidador Experto ── */
+.pp-expert {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff7e0, #ffe8a3);
+  border: 1px solid rgba(212, 160, 23, 0.45);
+  box-shadow: 0 8px 24px rgba(212, 160, 23, 0.18);
+}
+
+.pp-expert--locked {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(19, 75, 93, 0.13);
+  box-shadow: none;
+  filter: grayscale(0.4);
+}
+
+.pp-expert-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
+}
+.pp-expert--locked .pp-expert-icon { opacity: 0.55; }
+
+.pp-expert-body { flex: 1; min-width: 0; }
+
+.pp-expert-title {
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: #7a5a00;
+  margin: 0 0 2px;
+}
+.pp-expert--locked .pp-expert-title { color: var(--text-primary, #1b3a44); }
+
+.pp-expert-desc {
+  font-size: 0.82rem;
+  color: #8a6d1f;
+  margin: 0;
+}
+.pp-expert--locked .pp-expert-desc { color: var(--text-secondary, #5d7a87); }
+
+.pp-expert-meta {
+  font-size: 0.74rem;
+  color: #9a7c2a;
+  margin: 6px 0 0;
+}
+.pp-expert--locked .pp-expert-meta { color: var(--text-secondary, #5d7a87); }
+
+.pp-expert-progress {
+  margin-top: 8px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(19, 75, 93, 0.12);
+  overflow: hidden;
+}
+.pp-expert-progress__bar {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--primary-green, #34c759);
+  transition: width 0.4s ease;
+}
+
 .pp-ach-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
 .pp-ach {

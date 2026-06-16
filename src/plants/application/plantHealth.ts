@@ -51,18 +51,18 @@ function scoreBattery(v: number | null | undefined) {
   return 0;
 }
 
-export function computePlantHealth(plant: Plant): HealthResult {
-  const metrics = (plant.metrics || []).slice().sort((a, b) => {
-    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-  });
-
-  const latest = metrics[0] as any || null;
-
-  const soil = latest ? (latest.soilMoisturePct ?? latest.soil_moisture_pct ?? null) : null;
-  const temp = latest ? (latest.airTemperatureC ?? latest.temperatureC ?? latest.temperature_c ?? null) : null;
-  const light = latest ? (latest.lightIntensityLux ?? latest.light_level ?? null) : null;
-  const airHum = latest ? (latest.airHumidityPct ?? latest.air_humidity_pct ?? null) : null;
-  const battery = latest ? (latest.battery ?? latest.battery_level ?? null) : null;
+/**
+ * Evalúa el estado de salud de UNA lectura individual de sensor.
+ * Acepta tanto el formato normalizado (camelCase) como el crudo (snake_case).
+ * Reutilizado por el cálculo de salud de la planta y por la racha de
+ * gamificación "Cuidador Experto" (Hipótesis 5).
+ */
+export function computeMetricStatus(reading: any | null): HealthResult {
+  const soil = reading ? (reading.soilMoisturePct ?? reading.soil_moisture_pct ?? null) : null;
+  const temp = reading ? (reading.airTemperatureC ?? reading.temperatureC ?? reading.temperature_c ?? null) : null;
+  const light = reading ? (reading.lightIntensityLux ?? reading.light_level ?? null) : null;
+  const airHum = reading ? (reading.airHumidityPct ?? reading.air_humidity_pct ?? null) : null;
+  const battery = reading ? (reading.battery ?? reading.battery_level ?? null) : null;
 
   const scores: Record<string, number> = {
     soil: scoreSoil(soil),
@@ -80,12 +80,20 @@ export function computePlantHealth(plant: Plant): HealthResult {
     else if (v === 1) reasons.push(`${k} warning`);
   });
 
-  if (!latest) reasons.push('no metrics');
+  if (!reading) reasons.push('no metrics');
 
   const status: HealthStatus = maxScore === 0 ? 'healthy' : (maxScore === 1 ? 'warning' : 'critical');
-
   const reason = reasons.length > 0 ? reasons.join(', ') : 'all metrics optimal';
   return { status, reason, scores };
+}
+
+export function computePlantHealth(plant: Plant): HealthResult {
+  const metrics = (plant.metrics || []).slice().sort((a, b) => {
+    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+  });
+
+  const latest = metrics[0] as any || null;
+  return computeMetricStatus(latest);
 }
 
 export default computePlantHealth;

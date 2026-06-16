@@ -8,9 +8,17 @@ export interface UserAchievement {
     id: string;
     title: string;
     description: string;
+    /** Clave i18n opcional para traducir el título en la presentación. */
+    titleKey?: string;
+    /** Clave i18n opcional para traducir la descripción en la presentación. */
+    descKey?: string;
     icon: string;
     earnedDate: string | null;
     status: 'locked' | 'unlocked';
+    /** Insignia destacada (hero) que se muestra de forma prominente en el perfil. */
+    featured?: boolean;
+    /** Progreso 0..1 hacia el desbloqueo (para insignias por racha). */
+    progress?: number;
 }
 
 export interface UserProfile {

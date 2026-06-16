@@ -1,6 +1,10 @@
 import type { Analytics, SensorData } from "../domain/model/analytics.entity";
 import { supabase } from "../../utils/supabase";
 import { AnalyticsAssembler } from "./assembler/analytics-assembler";
+import { withCache, invalidateCached } from "../../experiments/cache/metrics-cache";
+
+const CACHE_ALL_SENSOR_DATA = 'all_sensor_data';
+const CACHE_RECENT_AVERAGES = 'recent_averages';
 
 type ServiceResponse<T> = {
     data: T;
@@ -16,15 +20,18 @@ export class AnalyticsService {
     async getAllSensorData(): Promise<ServiceResponse<SensorData[]>> {
         // Fetch all metrics. This query does not require the current user
         // because IoT metrics are general and may have null plant_id.
-        // If your RLS policies require authenticated requests, configure them
-        // in Supabase or adjust this method to use a service key.
-        const { data, error } = await supabase
-            .from('plant_metrics')
-            .select('*')
-            .order('timestamp', { ascending: false });
+        // Se cachea en cliente (< 1.5 s en cargas repetidas) con TTL corto.
+        const data = await withCache<any[]>(CACHE_ALL_SENSOR_DATA, async () => {
+            const { data, error } = await supabase
+                .from('plant_metrics')
+                .select('*')
+                .order('timestamp', { ascending: false });
 
-        if (error) throw error;
-        return this.wrapResponse(data as any[]);
+            if (error) throw error;
+            return data as any[];
+        });
+
+        return this.wrapResponse(data);
     }
 
     async getSensorDataByDevice(deviceId: string): Promise<ServiceResponse<SensorData[]>> {
@@ -59,6 +66,9 @@ export class AnalyticsService {
             .select();
 
         if (error) throw error;
+        // Nuevas métricas: invalida la caché para forzar lectura fresca.
+        invalidateCached(CACHE_ALL_SENSOR_DATA);
+        invalidateCached(CACHE_RECENT_AVERAGES);
         return this.wrapResponse(data);
     }
 
@@ -98,6 +108,7 @@ export class AnalyticsService {
     }
 
     async getRecentAverages(limit: number = 5): Promise<ServiceResponse<any>> {
+        const result = await withCache<any>(`${CACHE_RECENT_AVERAGES}_${limit}`, async () => {
         const { data, error } = await supabase
             .from('plant_metrics')
             .select('*')
@@ -105,11 +116,11 @@ export class AnalyticsService {
             .limit(limit);
 
         if (error) throw error;
-        
+
         const recentData = data as any[];
 
         if (recentData.length === 0) {
-            return this.wrapResponse({
+            return ({
                 avgTemperature: 0,
                 avgHumidity: 0,
                 avgSoilMoisture: 0,
@@ -125,8 +136,8 @@ export class AnalyticsService {
         const mappedData = recentData.map((d: any) => AnalyticsAssembler.mapSensorData(d));
         const summary = AnalyticsAssembler.calculateSummary(mappedData);
         const dates = recentData.map((d: any) => d.timestamp || d.created_at);
-        
-        return this.wrapResponse({
+
+        return ({
             ...summary,
             count: recentData.length,
             period: {
@@ -135,6 +146,9 @@ export class AnalyticsService {
             },
             history: mappedData
         });
+        });
+
+        return this.wrapResponse(result);
     }
 }
 

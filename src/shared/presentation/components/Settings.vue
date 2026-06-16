@@ -5,10 +5,58 @@ import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../../auth/store/authStore';
 import { useI18n } from 'vue-i18n';
+import InputText from 'primevue/inputtext';
+import { discordWebhookService } from '../../../experiments/discord/discord-webhook.service';
+import { isValidDiscordWebhook } from '../../../experiments/discord/discord.entity';
+import { trackingService } from '../../../experiments/tracking/tracking.service';
 
 const $router = useRouter();
 const authStore = useAuthStore();
 const { locale, t } = useI18n();
+
+// ── Discord webhook (EC-01 / US-041) ──
+const discordUrl = ref('');
+const linkedWebhook = ref<string | null>(null);
+const discordError = ref<string | null>(null);
+const discordLoading = ref(false);
+const toastMessage = ref<string | null>(null);
+
+function showToast(message: string) {
+  toastMessage.value = message;
+  setTimeout(() => { toastMessage.value = null; }, 3000);
+}
+
+async function linkDiscord() {
+  discordError.value = null;
+  if (!isValidDiscordWebhook(discordUrl.value)) {
+    discordError.value = t('settings.discord.invalid');
+    return;
+  }
+  discordLoading.value = true;
+  try {
+    await discordWebhookService.linkWebhook(discordUrl.value);
+    linkedWebhook.value = discordUrl.value.trim();
+    discordUrl.value = '';
+    showToast(t('settings.discord.linkedToast'));
+  } catch (_e) {
+    discordError.value = t('settings.discord.errorToast');
+  } finally {
+    discordLoading.value = false;
+  }
+}
+
+async function unlinkDiscord() {
+  discordLoading.value = true;
+  try {
+    await discordWebhookService.unlinkWebhook();
+    linkedWebhook.value = null;
+    showToast(t('settings.discord.unlinkedToast'));
+  } catch (_e) {
+    discordError.value = t('settings.discord.errorToast');
+  } finally {
+    discordLoading.value = false;
+  }
+}
 
 // ── Appearance ──
 const themeOptions = ['Light', 'Dark', 'System'] as const;
@@ -78,7 +126,6 @@ const userId = computed(() => authStore.userId || '—');
 // ── Data & Privacy ──
 const showClearConfirm = ref(false);
 const showLogoutConfirm = ref(false);
-const clearSuccess = ref(false);
 
 function handleClearData() {
   const keysToKeep = ['token', 'userUuid', 'email'];
@@ -96,11 +143,13 @@ function handleClearData() {
   currentTheme.value = 'System';
   currentLanguage.value = 'en';
   showClearConfirm.value = false;
-  clearSuccess.value = true;
-  setTimeout(() => { clearSuccess.value = false; }, 3000);
+  showToast(t('settings.toast.cleared'));
 }
 
 async function handleLogout() {
+  try {
+    await trackingService.flush();
+  } catch (_e) { /* ignore */ }
   try {
     await authStore.logout();
   } catch (_e) { /* ignore */ }
@@ -108,10 +157,13 @@ async function handleLogout() {
 }
 
 // ── Init ──
-onMounted(() => {
+onMounted(async () => {
   applyTheme(currentTheme.value);
   document.documentElement.setAttribute('lang', currentLanguage.value);
   locale.value = currentLanguage.value as 'en' | 'es';
+  try {
+    linkedWebhook.value = await discordWebhookService.getWebhookUrl();
+  } catch (_e) { /* sin webhook o sin sesión */ }
 });
 </script>
 
@@ -164,6 +216,47 @@ onMounted(() => {
             <span v-if="currentLanguage === lang.code" class="check-mark">✓</span>
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Discord Alerts (EC-01 / US-041) -->
+    <div class="section">
+      <h2 class="section-title">
+        <span class="section-icon">💬</span> {{ $t('settings.discord.title') }}
+      </h2>
+      <div class="card">
+        <p class="card-description">{{ $t('settings.discord.description') }}</p>
+
+        <div v-if="linkedWebhook" class="discord-linked">
+          <span class="discord-linked__badge">
+            <i class="pi pi-check-circle"></i> {{ $t('settings.discord.linked') }}
+          </span>
+          <Button
+            :label="$t('settings.discord.unlink')"
+            icon="pi pi-link"
+            class="btn-danger-outline"
+            :disabled="discordLoading"
+            @click="unlinkDiscord"
+          />
+        </div>
+
+        <div v-else class="discord-form">
+          <InputText
+            v-model="discordUrl"
+            :placeholder="$t('settings.discord.placeholder')"
+            class="discord-input"
+            :aria-label="$t('settings.discord.title')"
+            @keyup.enter="linkDiscord"
+          />
+          <Button
+            :label="$t('settings.discord.link')"
+            icon="pi pi-discord"
+            class="discord-link-btn"
+            :disabled="discordLoading"
+            @click="linkDiscord"
+          />
+        </div>
+        <p v-if="discordError" class="discord-error">{{ discordError }}</p>
       </div>
     </div>
 
@@ -271,8 +364,8 @@ onMounted(() => {
 
     <!-- Success toast -->
     <Transition name="toast">
-      <div v-if="clearSuccess" class="toast-success">
-        ✅ {{ $t('settings.toast.cleared') }}
+      <div v-if="toastMessage" class="toast-success">
+        ✅ {{ toastMessage }}
       </div>
     </Transition>
   </div>
@@ -436,6 +529,55 @@ onMounted(() => {
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
   flex: 1;
+}
+
+/* ── Discord Section ── */
+.discord-form {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.discord-input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.discord-link-btn {
+  background: #5865f2 !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  border-radius: var(--radius-full) !important;
+}
+
+.discord-link-btn:hover {
+  background: #4752c4 !important;
+  transform: translateY(-1px);
+}
+
+.discord-linked {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.discord-linked__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--status-success, var(--primary-green));
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+}
+
+.discord-error {
+  margin: var(--spacing-md) 0 0;
+  color: var(--status-critical, #e53935);
+  font-size: var(--font-size-sm);
 }
 
 /* ── Toggle Styles ── */

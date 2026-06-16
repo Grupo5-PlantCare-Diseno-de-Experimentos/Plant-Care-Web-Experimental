@@ -25,3 +25,9 @@ dist-ssr
 
 .env.local
 .env.production
+
+# Obsidian configuration folder
+.obsidian/
+
+# Text files
+*.txt
