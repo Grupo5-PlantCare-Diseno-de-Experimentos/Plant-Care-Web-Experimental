@@ -26,7 +26,7 @@ export const setupAuthStore = (adapter: IAuthService, profileService: IProfileSe
       sessionStorage.removeItem('token');
     };
 
-    const persistSession = async (authenticatedUser: UserEntity) => {
+    const persistSession = async () => {
       const sessionToken = await adapter.getSessionToken();
 
       if (!sessionToken) {
@@ -45,7 +45,7 @@ export const setupAuthStore = (adapter: IAuthService, profileService: IProfileSe
       try {
         const loggedUser = await loginUseCase.execute(email, password);
         user.value = loggedUser;
-        await persistSession(loggedUser);
+        await persistSession();
       } catch (e: unknown) {
         error.value = getErrorMessage(e);
         throw e;
@@ -71,7 +71,7 @@ export const setupAuthStore = (adapter: IAuthService, profileService: IProfileSe
             console.warn('Profile creation warning (non-blocking):', getErrorMessage(profileError));
           }
 
-          await persistSession(newUser);
+          await persistSession();
         }
       } catch (e: unknown) {
         error.value = getErrorMessage(e);
@@ -101,7 +101,7 @@ export const setupAuthStore = (adapter: IAuthService, profileService: IProfileSe
         user.value = await adapter.getCurrentUser();
         
         if (user.value) {
-          await persistSession(user.value);
+          await persistSession();
           return;
         }
 
