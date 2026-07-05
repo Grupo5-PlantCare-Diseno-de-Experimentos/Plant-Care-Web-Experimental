@@ -48,7 +48,7 @@ import { useRoute } from 'vue-router';
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from './auth/store/authStore';
-import { useProfileStore } from './Profile/application/profile.store';
+import { useProfileStore } from './profile/application/profile.store';
 
 import { injectSpeedInsights } from "@vercel/speed-insights";
 

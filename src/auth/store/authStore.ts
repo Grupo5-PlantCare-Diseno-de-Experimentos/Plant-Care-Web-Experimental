@@ -1,5 +1,5 @@
 import { SupabaseAuthAdapter } from '../adapters/SupabaseAuthAdapter';
-import { profileService } from '../../Profile/infrastructure/profile.service';
+import { profileService } from '../../profile/infrastructure/profile.service';
 import { setupAuthStore } from './authStoreFactory';
 
 const authAdapter = new SupabaseAuthAdapter();

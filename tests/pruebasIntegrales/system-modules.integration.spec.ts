@@ -192,7 +192,6 @@ describe('Pruebas integrales del sistema', () => {
     expect(authService.getSessionToken).toHaveBeenCalled();
     expect(store.user?.email).toBe('new@example.com');
     expect(store.token).toBe('session-token-2');
-    expect(localStorage.getItem('token')).toBe('session-token-2');
-    expect(localStorage.getItem('userUuid')).toBe('user-2');
+    expect(sessionStorage.getItem('token')).toBe('session-token-2');
   });
 });

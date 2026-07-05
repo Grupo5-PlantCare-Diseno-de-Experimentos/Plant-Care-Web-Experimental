@@ -30,7 +30,7 @@ const router = createRouter({
     {
       path: '/complete-profile',
       name: 'CompleteProfile',
-      component: () => import('./Profile/Components/CompleteProfile.vue'),
+      component: () => import('./profile/Components/CompleteProfile.vue'),
       meta: { hideLayout: true, requiresAuth: true }
     },
     // App routes (with layout)
@@ -77,7 +77,7 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'Profile',
-      component: () => import('./Profile/Components/Profile.vue'),
+      component: () => import('./profile/Components/Profile.vue'),
       meta: { requiresAuth: true }
     },
     {

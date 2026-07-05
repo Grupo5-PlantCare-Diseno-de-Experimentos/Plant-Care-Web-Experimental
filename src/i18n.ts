@@ -18,7 +18,7 @@ const messages = {
     },
     errors: {
       notAuthenticated: 'Usuario no autenticado.',
-      notAuthenticatedLogin: 'Usuario no autenticado. Inicia sesion.',
+      notAuthenticatedLogin: 'Usuario no autenticado. Inicia sesión.',
       dashboardLoad: 'No se pudo cargar el dashboard.',
       analyticsLoad: 'No se pudieron cargar las analiticas.'
     },
@@ -34,22 +34,22 @@ const messages = {
       nav: {
         dashboard: 'Dashboard',
         plants: 'Plantas',
-        settings: 'Configuracion',
+        settings: 'Configuración',
         profile: 'Perfil',
-        analytics: 'Analiticas'
+        analytics: 'Analíticas'
       },
       status: {
         signedIn: 'Conectado',
         signedOut: 'Desconectado'
       },
-      logout: 'Cerrar sesion',
+      logout: 'Cerrar sesión',
       guest: 'Invitado'
     },
     settings: {
-      title: 'Configuracion',
+      title: 'Configuración',
       appearance: {
         title: 'Apariencia',
-        description: 'Elige el tema preferido para la aplicacion.',
+        description: 'Elige el tema preferido para la aplicación.',
         light: 'Claro',
         dark: 'Oscuro',
         system: 'Sistema'
@@ -82,7 +82,7 @@ const messages = {
         },
         weekly: {
           title: 'Reportes semanales',
-          description: 'Recibe resumentes semanales de salud por email'
+          description: 'Recibe resúmenes semanales de salud por email'
         },
         push: {
           title: 'Notificaciones push',
@@ -99,9 +99,9 @@ const messages = {
         clearTitle: 'Borrar datos de la app',
         clearDesc: 'Elimina preferencias y cache local. Tu cuenta no se elimina.',
         clearButton: 'Borrar datos',
-        signOutTitle: 'Cerrar sesion',
-        signOutDesc: 'Cierra tu sesion en este dispositivo.',
-        signOutButton: 'Cerrar sesion',
+        signOutTitle: 'Cerrar sesión',
+        signOutDesc: 'Cierra tu sesión en este dispositivo.',
+        signOutButton: 'Cerrar sesión',
         cancel: 'Cancelar',
         confirm: 'Confirmar'
       },
@@ -133,37 +133,37 @@ const messages = {
         dueDays: 'Vence en {days}d',
         lastWateredHours: 'Regada hace {hours}h',
         lastWateredDays: 'Regada hace {days}d',
-        needsReview: 'Necesita revision'
+        needsReview: 'Necesita revisión'
       },
-      noLocation: 'Sin ubicacion'
+      noLocation: 'Sin ubicación'
     },
     analytics: {
       header: {
         eyebrow: 'Dashboard',
-        title: 'Analiticas y reportes',
+        title: 'Analíticas y reportes',
         subtitle: 'Sigue el rendimiento y las tendencias de crecimiento'
       },
       badge: {
-        last30Days: 'Ultimos 30 dias'
+        last30Days: 'Últimos 30 días'
       },
       loading: 'Sincronizando datos del sensor...',
       error: {
-        title: 'No se pudo cargar analiticas',
+        title: 'No se pudo cargar analíticas',
         retry: 'Reintentar'
       },
       empty: {
         noPlants: {
-          title: 'Aun no hay plantas',
+          title: 'Aún no hay plantas',
           subtitle: 'Agrega tu primera planta para empezar a medir su crecimiento y salud.',
           cta: 'Agregar mi primera planta'
         },
         noData: {
           title: 'Esperando datos...',
-          subtitle: 'Tus plantas estan agregadas, pero aun no recibimos datos de sensores.',
+          subtitle: 'Tus plantas están agregadas, pero aún no recibimos datos de sensores.',
           hint: 'Las analiticas apareceran cuando los sensores empiecen a transmitir.'
         },
         noHistory: {
-          title: 'No hay historico disponible',
+          title: 'No hay histórico disponible',
           subtitle: 'El historico aparecera cuando se registren datos de sensores.'
         }
       },
@@ -172,7 +172,7 @@ const messages = {
         healthyPlants: 'Plantas saludables',
         avgHumidity: 'Humedad promedio',
         avgSoilMoisture: 'Humedad del suelo promedio',
-        needAttention: 'Requieren atencion',
+        needAttention: 'Requieren atención',
         trendMonth: '+2 este mes',
         healthRate: '{rate}% de salud',
         ambientLevel: 'Nivel ambiente',
@@ -189,7 +189,7 @@ const messages = {
         temperatureSub: 'Promedio de temperatura en todas las plantas',
         humidityTitle: 'Tendencia de humedad',
         humiditySub: 'Promedio de humedad en todas las plantas',
-        healthTitle: 'Distribucion de salud de plantas',
+        healthTitle: 'Distribución de salud de plantas',
         healthSub: 'Estado actual de todas tus plantas',
         soilTitle: 'Humedad del suelo',
         soilSub: 'Nivel promedio de humedad del suelo',
@@ -200,14 +200,14 @@ const messages = {
         lightSub: 'Intensidad promedio de luz',
         lightLabel: 'Nivel de luz',
         lightAverage: 'Intensidad promedio',
-        historicalTitle: 'Analiticas historicas',
-        historicalSub: 'Promedio de las ultimas 5 lecturas',
+        historicalTitle: 'Analíticas históricas',
+        historicalSub: 'Promedio de las últimas 5 lecturas',
         refresh: 'Actualizar'
       },
       legend: {
         healthy: 'Saludable',
-        warning: 'Atencion',
-        critical: 'Critico'
+        warning: 'Atención',
+        critical: 'Crítico'
       },
       historical: {
         temperature: 'Temperatura',
@@ -243,8 +243,8 @@ const messages = {
         aria: 'Filtrar por estado',
         all: 'Todas las plantas',
         healthy: 'Saludables',
-        warning: 'Atencion',
-        critical: 'Criticas'
+        warning: 'Atención',
+        critical: 'Críticas'
       },
       menu: {
         edit: 'Editar',
@@ -252,7 +252,7 @@ const messages = {
       },
       confirm: {
         deleteMessage: 'Eliminar "{name}"? Esto no se puede deshacer.',
-        deleteHeader: 'Confirmar eliminacion'
+        deleteHeader: 'Confirmar eliminación'
       },
       toast: {
         deleted: 'Eliminado',
@@ -268,8 +268,8 @@ const messages = {
       },
       status: {
         healthy: 'Saludable',
-        warning: 'Atencion',
-        critical: 'Critico'
+        warning: 'Atención',
+        critical: 'Crítico'
       },
       empty: {
         title: 'No se encontraron plantas',
@@ -297,8 +297,8 @@ const messages = {
       watering: {
         title: 'Horario de riego',
         nextUp: 'Proximo',
-        lastWatered: 'Ultimo riego',
-        nextWatering: 'Proximo riego',
+        lastWatered: 'Último riego',
+        nextWatering: 'Próximo riego',
         button: 'Regar planta',
         buttonLoading: 'Regando...'
       },
@@ -309,32 +309,32 @@ const messages = {
         back: 'Volver a plantas'
       },
       toast: {
-        success: 'Exito',
+        success: 'Éxito',
         waterSuccess: '💧 Planta regada correctamente',
         error: 'Error',
         waterFail: 'No se pudo regar la planta',
         deleteSuccess: 'Planta eliminada correctamente',
         deleteFail: 'Hubo un error al eliminar la planta',
         cancelled: 'Cancelado',
-        deleteCancelled: 'Eliminacion cancelada'
+        deleteCancelled: 'Eliminación cancelada'
       },
       confirm: {
         deleteMessage: 'Seguro que deseas eliminar esta planta? Esta accion no se puede deshacer.',
-        deleteHeader: 'Confirmar eliminacion'
+        deleteHeader: 'Confirmar eliminación'
       }
     },
     plantAnalytics: {
-      title: '📊 Analiticas de riego',
+      title: '📊 Analíticas de riego',
       stats: {
         totalWaterings: 'Riegos totales',
-        daysBetween: 'Dias entre riegos',
-        successRate: 'Tasa de exito',
-        daysWithoutWater: 'Dias sin riego'
+        daysBetween: 'Días entre riegos',
+        successRate: 'Tasa de éxito',
+        daysWithoutWater: 'Días sin riego'
       },
       logs: {
         title: '🕐 Registros recientes',
-        latest: 'Ultimo',
-        empty: 'Aun no hay registros de riego. Presiona "Regar ahora" para crear el primero. 💧'
+        latest: 'Último',
+        empty: 'Aún no hay registros de riego. Presiona "Regar ahora" para crear el primero. 💧'
       },
       summary: {
         title: '📋 Resumen',
@@ -359,7 +359,7 @@ const messages = {
         lowLight: '💡 Poca luz ({value} lux)',
         humidityExtreme: '💧 Humedad extrema ({value}%)',
         lowBattery: '🔋 Bateria baja ({value}%)',
-        allOptimal: '✅ Todas las condiciones son optimas'
+        allOptimal: '✅ Todas las condiciones son óptimas'
       }
     },
     plantForm: {
@@ -373,8 +373,8 @@ const messages = {
         name: 'Nombre',
         type: 'Tipo',
         image: 'URL de imagen',
-        location: 'Ubicacion',
-        bio: 'Descripcion'
+        location: 'Ubicación',
+        bio: 'Descripción'
       },
       placeholder: {
         name: 'Ej. Monstera Deliciosa',
@@ -390,11 +390,11 @@ const messages = {
         nameRequired: 'El nombre es obligatorio',
         typeRequired: 'El tipo es obligatorio',
         loadFailed: 'No se pudieron cargar los detalles de la planta.',
-        mustSignIn: 'Debes iniciar sesion para crear una planta. Redirigiendo...',
-        noUserId: 'No se encontro un userId para asociar la planta.',
-        sessionExpired: 'Sesion expirada. Inicia sesion nuevamente.',
+        mustSignIn: 'Debes iniciar sesión para crear una planta. Redirigiendo...',
+        noUserId: 'No se encontró un userId para asociar la planta.',
+        sessionExpired: 'Sesión expirada. Inicia sesión nuevamente.',
         noPermission: 'No tienes permiso para crear plantas.',
-        invalidData: 'Datos invalidos',
+        invalidData: 'Datos inválidos',
         unknown: 'Error desconocido',
         validation: 'Error de validacion: {message}',
         generic: 'Error: {message}'
@@ -408,9 +408,9 @@ const messages = {
     auth: {
       form: {
         email: 'Email',
-        password: 'Contrasena',
+        password: 'Contraseña',
         emailPlaceholder: 'Ingresa tu email',
-        passwordPlaceholder: 'Ingresa tu contrasena',
+        passwordPlaceholder: 'Ingresa tu contraseña',
         submit: 'Ingresar',
         loading: 'Cargando...'
       },
@@ -420,75 +420,75 @@ const messages = {
         description: 'Accede a tu panel con una experiencia limpia, segura y futurista.',
         secure: 'Seguro',
         secureDesc: 'Inicio protegido',
-        fast: 'Rapido',
+        fast: 'Rápido',
         fastDesc: 'Acceso fluido',
         modern: 'Moderno',
         modernDesc: 'Interfaz minimalista',
         welcome: 'Bienvenido de nuevo',
-        subtitle: 'Ingresa tus credenciales para iniciar sesion',
+        subtitle: 'Ingresa tus credenciales para iniciar sesión',
         noAccount: 'No tienes cuenta?',
         createNow: 'Crea una ahora'
       },
       signup: {
         eyebrow: 'Acceso seguro PlantCare',
         title: 'Crear cuenta',
-        subtitle: 'Unete y comienza tu viaje de cuidado de plantas',
+        subtitle: 'Únete y comienza tu viaje de cuidado de plantas',
         emailLabel: 'Correo',
-        passwordLabel: 'Contrasena',
-        confirmLabel: 'Confirmar contrasena',
+        passwordLabel: 'Contraseña',
+        confirmLabel: 'Confirmar contraseña',
         emailPlaceholder: "tu{'@'}email.com",
-        passwordPlaceholder: 'Minimo 8 caracteres con mayusculas, minusculas, numero y simbolo',
-        confirmPlaceholder: 'Reingresa tu contrasena',
+        passwordPlaceholder: 'Mínimo 8 caracteres con mayúsculas, minúsculas, número y símbolo',
+        confirmPlaceholder: 'Reingresa tu contraseña',
         emailRequired: 'El email es obligatorio.',
         emailInvalid: 'Ingresa un email valido.',
-        passwordRequired: 'La contrasena es obligatoria.',
+        passwordRequired: 'La contraseña es obligatoria.',
         passwordInvalid: 'La contrasena debe incluir: {issues}.',
-        confirmRequired: 'Confirma tu contrasena.',
-        passwordMismatch: 'Las contrasenas no coinciden.',
-        passwordsMatch: 'Las contrasenas coinciden',
+        confirmRequired: 'Confirma tu contraseña.',
+        passwordMismatch: 'Las contraseñas no coinciden.',
+        passwordsMatch: 'Las contraseñas coinciden',
         strengthLabel: 'Fortaleza',
-        strengthWeak: 'Debil',
+        strengthWeak: 'Débil',
         strengthGood: 'Buena',
         strengthStrong: 'Fuerte',
         missing: 'Falta:',
         requirementsMet: 'La contrasena cumple los requisitos',
         requirements: {
           minLength: 'Al menos 8 caracteres',
-          lowercase: 'Minuscula',
-          uppercase: 'Mayuscula',
-          number: 'Numero',
-          symbol: 'Caracter especial'
+          lowercase: 'Minúscula',
+          uppercase: 'Mayúscula',
+          number: 'Número',
+          symbol: 'Carácter especial'
         },
         register: 'Registrar',
         creating: 'Creando cuenta...',
-        haveAccount: 'Ya tienes cuenta?',
-        signInHere: 'Inicia sesion aqui',
+        haveAccount: '¿Ya tienes cuenta?',
+        signInHere: 'Inicia sesión aquí',
         waitBeforeRetry: 'Espera antes de intentar de nuevo.',
         allFieldsRequired: 'Todos los campos son obligatorios.',
-        invalidEmail: 'Ingresa un email valido.',
+        invalidEmail: 'Ingresa un email válido.',
         passwordMustInclude: 'La contrasena debe incluir: {issues}.',
         registrationFailed: 'No se pudo registrar. Intenta de nuevo.',
-        emailRegistered: 'Este email ya esta registrado. Inicia sesion.',
-        invalidEmailFormat: 'Formato de email invalido.',
+        emailRegistered: 'Este email ya está registrado. Inicia sesión.',
+        invalidEmailFormat: 'Formato de email inválido.',
         toast: {
           checkInbox: 'Revisa tu correo',
-          accountCreated: 'Cuenta creada. Confirma tu email antes de iniciar sesion.',
-          success: 'Exito',
-          redirectSetup: 'Cuenta creada. Redirigiendo a configuracion...',
+          accountCreated: 'Cuenta creada. Confirma tu email antes de iniciar sesión.',
+          success: 'Éxito',
+          redirectSetup: 'Cuenta creada. Redirigiendo a configuración...',
           error: 'Error'
         }
       },
       supabase: {
-        signIn: 'Iniciar sesion',
+        signIn: 'Iniciar sesión',
         signUp: 'Registrarse',
         enter: 'Entrar',
         welcome: 'Bienvenido, {email}',
-        signOut: 'Cerrar sesion'
+        signOut: 'Cerrar sesión'
       },
       authMenu: {
         welcome: 'Bienvenido',
-        signOut: 'Cerrar sesion',
-        signIn: 'Iniciar sesion',
+        signOut: 'Cerrar sesión',
+        signIn: 'Iniciar sesión',
         signUp: 'Registrarse',
         guest: 'Invitado'
       }
@@ -498,9 +498,9 @@ const messages = {
       error: 'Error al cargar perfil: {error}',
       changePhoto: 'Cambiar foto',
       eyebrow: 'Cuidador de plantas',
-      joined: 'Se unio',
-      noLocation: 'Sin ubicacion',
-      noBio: 'Sin biografia aun.',
+      joined: 'Se unió',
+      noLocation: 'Sin ubicación',
+      noBio: 'Sin biografía aún.',
       editProfile: 'Editar perfil',
       stats: {
         totalPlants: 'Total de plantas',
@@ -510,7 +510,7 @@ const messages = {
       },
       section: {
         account: 'Cuenta',
-        personalInfo: 'Informacion personal',
+        personalInfo: 'Información personal',
         milestones: 'Hitos',
         achievements: 'Logros recientes'
       },
@@ -519,24 +519,24 @@ const messages = {
       },
       info: {
         email: 'Email',
-        phone: 'Telefono',
-        location: 'Ubicacion',
+        phone: 'Teléfono',
+        location: 'Ubicación',
         memberSince: 'Miembro desde'
       },
       form: {
         fullName: 'Nombre completo',
         email: 'Correo',
-        phone: 'Telefono',
-        location: 'Ubicacion',
+        phone: 'Teléfono',
+        location: 'Ubicación',
         bio: 'Bio',
         fullNamePlaceholder: 'Tu nombre completo',
         phonePlaceholder: '+51 ...',
-        locationPlaceholder: 'Ciudad, Pais',
-        bioPlaceholder: 'Cuentanos sobre ti...',
+        locationPlaceholder: 'Ciudad, País',
+        bioPlaceholder: 'Cuéntanos sobre ti...',
         cancel: 'Cancelar',
         saveChanges: 'Guardar cambios'
       },
-      emptyAchievements: 'Aun no hay logros. Sigue regando tus plantas! 🌱',
+      emptyAchievements: 'Aún no hay logros. ¡Sigue regando tus plantas! 🌱',
       achievementsList: {
         firstPlant: { title: 'Primera planta', desc: 'Agregaste tu primera planta a la app' },
         collector: { title: 'Coleccionista', desc: 'Registraste 5 o más plantas' },
@@ -558,20 +558,20 @@ const messages = {
     completeProfile: {
       eyebrow: 'Bienvenido a PlantCare',
       title: 'Completa tu perfil',
-      subtitle: 'Cuentanos un poco mas para personalizar tu experiencia. Puedes omitirlo por ahora.',
+      subtitle: 'Cuéntanos un poco más para personalizar tu experiencia. Puedes omitirlo por ahora.',
       fullName: 'Nombre completo',
-      phone: 'Telefono',
-      location: 'Ubicacion',
+      phone: 'Teléfono',
+      location: 'Ubicación',
       bio: 'Bio',
       fullNamePlaceholder: 'John Doe',
       phonePlaceholder: '+1 234 567 8900',
-      locationPlaceholder: 'Ciudad, Pais',
-      bioPlaceholder: 'Cuentanos sobre tu amor por las plantas...',
+      locationPlaceholder: 'Ciudad, País',
+      bioPlaceholder: 'Cuéntanos sobre tu amor por las plantas...',
       save: 'Guardar perfil',
       saving: 'Guardando...',
       skip: 'Omitir por ahora',
       toast: {
-        success: 'Exito',
+        success: 'Éxito',
         completed: 'Perfil completado. Redirigiendo...',
         error: 'Error',
         failed: 'No se pudo actualizar el perfil'
@@ -642,8 +642,8 @@ const messages = {
       healthBadge: {
         healthy: 'Saludable',
         fair: 'Aceptable',
-        warning: 'Atencion',
-        critical: 'Critico'
+        warning: 'Atención',
+        critical: 'Crítico'
       }
     }
   },

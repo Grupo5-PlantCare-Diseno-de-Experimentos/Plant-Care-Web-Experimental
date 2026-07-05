@@ -13,7 +13,7 @@ export const setupAuthStore = (adapter: IAuthService, profileService: IProfileSe
     const loginUseCase = new LoginUseCase(adapter);
 
     const user = ref<UserEntity | null>(null);
-    const token = ref<string | null>(localStorage.getItem('token'));
+    const token = ref<string | null>(sessionStorage.getItem('token'));
     const isLoading = ref<boolean>(false);
     const error = ref<string | null>(null);
 
@@ -23,9 +23,7 @@ export const setupAuthStore = (adapter: IAuthService, profileService: IProfileSe
 
     const clearStoredAuth = () => {
       token.value = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('userUuid');
-      localStorage.removeItem('email');
+      sessionStorage.removeItem('token');
     };
 
     const persistSession = async (authenticatedUser: UserEntity) => {
@@ -37,9 +35,7 @@ export const setupAuthStore = (adapter: IAuthService, profileService: IProfileSe
       }
 
       token.value = sessionToken;
-      localStorage.setItem('token', sessionToken);
-      localStorage.setItem('userUuid', authenticatedUser.id);
-      localStorage.setItem('email', authenticatedUser.email);
+      sessionStorage.setItem('token', sessionToken);
     };
 
     const login = async (email: string, password: string) => {

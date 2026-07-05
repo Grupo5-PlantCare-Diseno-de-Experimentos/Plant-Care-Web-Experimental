@@ -177,6 +177,6 @@ beforeAll(() => {
 });
 
 afterEach(() => {
-  localStorage.clear();
+  sessionStorage.clear();
   document.documentElement.removeAttribute('data-theme');
 });
