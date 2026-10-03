@@ -9,6 +9,7 @@ import InputText from 'primevue/inputtext';
 import { discordWebhookService } from '../../../experiments/discord/discord-webhook.service';
 import { isValidDiscordWebhook } from '../../../experiments/discord/discord.entity';
 import { trackingService } from '../../../experiments/tracking/tracking.service';
+import { useTheme } from '../composables/useTheme';
 
 const $router = useRouter();
 const authStore = useAuthStore();
@@ -61,26 +62,10 @@ async function unlinkDiscord() {
 // ── Appearance ──
 const themeOptions = ['Light', 'Dark', 'System'] as const;
 type Theme = typeof themeOptions[number];
-const currentTheme = ref<Theme>(
-  (localStorage.getItem('app_theme') as Theme) || 'System'
-);
+const { mode: currentTheme, setMode } = useTheme();
 
-function resolveSystemTheme(): 'light' | 'dark' {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-function applyTheme(theme: Theme) {
-  const effective = theme === 'System' ? resolveSystemTheme() : theme.toLowerCase();
-  document.documentElement.setAttribute('data-theme', effective);
-}
-
-watch(currentTheme, (val) => {
-  localStorage.setItem('app_theme', val);
-  applyTheme(val);
-});
-
-function selectTheme(t: Theme) {
-  currentTheme.value = t;
+function selectTheme(theme: Theme) {
+  setMode(theme);
 }
 
 // ── Language ──
@@ -140,7 +125,7 @@ function handleClearData() {
   humidityAlerts.value = true;
   weeklyReports.value = true;
   pushNotifications.value = false;
-  currentTheme.value = 'System';
+  setMode('System');
   currentLanguage.value = 'en';
   showClearConfirm.value = false;
   showToast(t('settings.toast.cleared'));
@@ -158,7 +143,6 @@ async function handleLogout() {
 
 // ── Init ──
 onMounted(async () => {
-  applyTheme(currentTheme.value);
   document.documentElement.setAttribute('lang', currentLanguage.value);
   locale.value = currentLanguage.value as 'en' | 'es';
   try {
@@ -544,16 +528,16 @@ onMounted(async () => {
 }
 
 .discord-link-btn {
-  background: #5865f2 !important;
-  border: none !important;
-  color: #fff !important;
+  background: #5865f2;
+  border: none;
+  color: #fff;
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
-  border-radius: var(--radius-full) !important;
+  border-radius: var(--radius-full);
 }
 
 .discord-link-btn:hover {
-  background: #4752c4 !important;
+  background: #4752c4;
   transform: translateY(-1px);
 }
 
@@ -569,14 +553,14 @@ onMounted(async () => {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--status-success, var(--primary-green));
+  color: var(--status-success);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-sm);
 }
 
 .discord-error {
   margin: var(--spacing-md) 0 0;
-  color: var(--status-critical, #e53935);
+  color: var(--status-critical);
   font-size: var(--font-size-sm);
 }
 
@@ -609,15 +593,6 @@ onMounted(async () => {
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
   margin: 0;
-}
-
-/* Override PrimeVue InputSwitch styles */
-:deep(.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider) {
-  background: var(--primary-green) !important;
-}
-
-:deep(.p-inputswitch .p-inputswitch-slider) {
-  background: var(--border-color);
 }
 
 /* ── Account Info ── */
@@ -653,7 +628,7 @@ onMounted(async () => {
 }
 
 .account-value.mono {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: var(--font-size-xs);
   background: var(--bg-secondary);
   padding: 4px 10px;
@@ -667,7 +642,7 @@ onMounted(async () => {
 
 /* ── Danger Zone ── */
 .danger-title {
-  color: var(--status-critical) !important;
+  color: var(--status-critical);
 }
 
 .danger-card {
@@ -706,43 +681,43 @@ onMounted(async () => {
 }
 
 .btn-danger-outline {
-  background: transparent !important;
-  border: 1px solid color-mix(in srgb, var(--status-critical) 40%, transparent) !important;
-  color: var(--status-critical) !important;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--status-critical) 40%, transparent);
+  color: var(--status-critical);
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
-  transition: all 0.3s ease !important;
-  border-radius: var(--radius-full) !important;
+  transition: all 0.3s ease;
+  border-radius: var(--radius-full);
 }
 
 .btn-danger-outline:hover {
-  background: color-mix(in srgb, var(--status-critical) 8%, transparent) !important;
-  border-color: var(--status-critical) !important;
+  background: color-mix(in srgb, var(--status-critical) 8%, transparent);
+  border-color: var(--status-critical);
   transform: translateY(-1px);
 }
 
 .btn-danger {
-  background: var(--status-critical) !important;
-  border: none !important;
-  color: var(--text-inverse) !important;
+  background: var(--status-critical);
+  border: none;
+  color: #fff;
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
-  border-radius: var(--radius-full) !important;
+  border-radius: var(--radius-full);
 }
 
 .btn-danger:hover {
-  background: color-mix(in srgb, var(--status-critical) 80%, var(--bg-primary)) !important;
+  background: color-mix(in srgb, var(--status-critical) 80%, var(--bg-primary));
   transform: translateY(-1px);
   box-shadow: 0 4px 12px color-mix(in srgb, var(--status-critical) 30%, transparent);
 }
 
 .btn-cancel {
-  background: var(--bg-secondary) !important;
-  border: 1px solid var(--border-color) !important;
-  color: var(--text-primary) !important;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
-  border-radius: var(--radius-full) !important;
+  border-radius: var(--radius-full);
 }
 
 .confirm-group {

@@ -57,12 +57,17 @@ const futuristicIcons: Record<string, string> = {
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
     <polyline points="16 17 21 12 16 7"/>
     <line x1="21" y1="12" x2="9" y2="12"/>
+  </svg>`,
+  ai: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
+    <circle cx="12" cy="12" r="3.5"/>
   </svg>`
 };
 
 const navItems = [
   { path: '/dashboard', name: 'Dashboard', labelKey: 'sidebar.nav.dashboard', icon: 'dashboard' },
   { path: '/plants', name: 'PlantsList', labelKey: 'sidebar.nav.plants', icon: 'plants' },
+  { path: '/ai', name: 'Ai', labelKey: 'sidebar.nav.ai', icon: 'ai' },
   { path: '/settings', name: 'Settings', labelKey: 'sidebar.nav.settings', icon: 'settings' },
   { path: '/profile', name: 'Profile', labelKey: 'sidebar.nav.profile', icon: 'profile' },
   { path: '/analytics', name: 'Analytics', labelKey: 'sidebar.nav.analytics', icon: 'analytics' },
@@ -150,11 +155,8 @@ const authStatusClass = computed(() => ({
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap');
-
 /* ------------------------------------------------------------------
-   SIDEBAR – Diseño glass-futurista tomado de PlantDetail
-   Se respetan las variables globales ya definidas en tu proyecto
+   SIDEBAR – Glass sobre los tokens globales
    (--bg-sidebar, --text-primary, --primary-green, etc.)
    ------------------------------------------------------------------ */
 .sidebar {
@@ -169,8 +171,6 @@ const authStatusClass = computed(() => ({
   box-shadow: var(--shadow-md);
   z-index: 100;
   transform: translateX(0);
-  /* Tipografía futurista (solo dentro del sidebar) */
-  font-family: 'Space Grotesk', sans-serif;
   color: var(--text-primary);
   /* Glassmorfismo heredado de las variables globales */
   backdrop-filter: blur(20px) saturate(150%);
@@ -200,8 +200,7 @@ const authStatusClass = computed(() => ({
   width: 44px;
   height: 44px;
   border-radius: var(--radius-md);
-  /* Gradiente fijo inspirado en PlantDetail (se ve bien en ambos temas) */
-  background: linear-gradient(130deg, #a0ffd7, #66d9ff);
+  background: var(--gradient-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -222,8 +221,6 @@ const authStatusClass = computed(() => ({
 }
 
 .logo-text {
-  /* Fuente de encabezados tipo PlantDetail */
-  font-family: 'Sora', sans-serif;
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
@@ -341,7 +338,7 @@ const authStatusClass = computed(() => ({
 
 .status-dot.online {
   background: var(--status-success);
-  box-shadow: 0 0 8px rgba(52, 199, 89, 0.4); /* soft glow, same as before */
+  box-shadow: 0 0 8px color-mix(in srgb, var(--status-success) 40%, transparent);
 }
 
 .status-dot.offline {
@@ -364,12 +361,11 @@ const authStatusClass = computed(() => ({
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  font-family: 'Space Grotesk', sans-serif;
 }
 
 .logout-btn:hover {
   background: var(--status-critical);
-  color: white;
+  color: #fff;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }

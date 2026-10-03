@@ -65,40 +65,55 @@ const handleSubmit = () => {
 }
 
 label {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--text-primary);
 }
 
 input {
-  padding: 0.75rem;
+  padding: 0.875rem 1rem;
   border: 1px solid var(--border-color);
-  background: var(--bg-card);
-  border-radius: 4px;
+  background: color-mix(in srgb, var(--bg-card) 78%, transparent);
+  border-radius: var(--radius-md);
   font-size: 1rem;
-  color: var(--text-primary) !important;
+  font-family: inherit;
+  color: var(--text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 input::placeholder {
-  color: var(--text-secondary) !important;
+  color: var(--text-tertiary);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: var(--focus-ring);
 }
 
 .submit-btn {
-  padding: 0.75rem;
-  background-color: var(--primary-green);
-  color: var(--text-inverse);
+  padding: 0.875rem;
+  background: var(--gradient-primary);
+  color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-full);
   font-size: 1rem;
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
-  transition: background-color 0.2s;
+  box-shadow: var(--shadow-green);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
 }
 
 .submit-btn:hover {
-  background-color: var(--primary-green-hover);
+  transform: translateY(-1px);
+  filter: brightness(1.03);
 }
 
 .submit-btn:disabled {
-  background-color: var(--border-color);
+  background: var(--border-color);
+  color: var(--text-secondary);
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  filter: none;
 }
 </style>

@@ -9,7 +9,10 @@ export type TrackingEventName =
   | 'view_promotion'
   | 'purchase_simulation'
   | 'click_alert_link'
-  | 'dashboard_view';
+  | 'dashboard_view'
+  | 'ai_prompt'
+  | 'ai_explanation'
+  | 'ai_insights';
 
 export interface TrackingEvent {
   eventName: TrackingEventName;

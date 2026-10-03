@@ -106,8 +106,8 @@ const handleSkip = () => {
   justify-content: center;
   padding: 1.25rem;
   background:
-    radial-gradient(circle at top left, rgba(138, 199, 61, 0.16), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(3, 56, 60, 0.24), transparent 34%),
+    radial-gradient(circle at top left, var(--primary-green-light), transparent 30%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--primary-green) 12%, transparent), transparent 34%),
     linear-gradient(135deg, var(--bg-primary) 0%, color-mix(in srgb, var(--bg-primary) 78%, var(--primary-green-light)) 100%);
   color: var(--text-primary);
 }
@@ -124,7 +124,7 @@ const handleSkip = () => {
   height: 260px;
   top: -90px;
   left: -90px;
-  background: rgba(138, 199, 61, 0.22);
+  background: color-mix(in srgb, var(--primary-green) 22%, transparent);
 }
 
 .bg-orbit-2 {
@@ -132,7 +132,7 @@ const handleSkip = () => {
   height: 340px;
   right: -120px;
   bottom: -120px;
-  background: rgba(3, 56, 60, 0.16);
+  background: var(--primary-green-light);
 }
 
 .bg-grid {
@@ -151,13 +151,13 @@ const handleSkip = () => {
   z-index: 1;
   width: 100%;
   max-width: 520px;
-  padding: 2rem;
-  border-radius: 2rem;
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-2xl);
   background: color-mix(in srgb, var(--bg-card) 84%, transparent);
   border: 1px solid var(--border-color);
   box-shadow:
-    0 24px 70px rgba(3, 56, 60, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    var(--shadow-xl),
+    inset 0 1px 0 color-mix(in srgb, var(--text-inverse) 50%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -174,19 +174,19 @@ const handleSkip = () => {
   height: 96px;
   display: grid;
   place-items: center;
-  border-radius: 28px;
+  border-radius: var(--radius-2xl);
   padding: 0.8rem;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, rgba(138, 199, 61, 0.18), rgba(3, 56, 60, 0.08));
+  background: var(--primary-green-light);
   border: 1px solid var(--border-color);
-  box-shadow: 0 18px 40px rgba(3, 56, 60, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .logo-image {
   max-width: 70px;
   width: 100%;
   height: auto;
-  border-radius: 14px;
+  border-radius: var(--radius-md);
 }
 
 .eyebrow {
@@ -195,12 +195,12 @@ const handleSkip = () => {
   gap: 0.45rem;
   padding: 0.45rem 0.75rem;
   margin-bottom: 0.8rem;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid var(--border-color);
   background: color-mix(in srgb, var(--bg-card) 74%, transparent);
-  color: var(--text-primary);
+  color: var(--primary-green);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -237,25 +237,25 @@ const handleSkip = () => {
   letter-spacing: -0.01em;
 }
 
-:deep(.p-inputtext), :deep(.p-inputtextarea) {
+:deep(.p-inputtext), :deep(.p-textarea) {
   width: 100%;
   padding: 0.95rem 1rem;
   border: 1px solid var(--border-color);
-  border-radius: 1rem;
+  border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--bg-card) 78%, transparent);
-  color: var(--text-primary) !important;
+  color: var(--text-primary);
   font-size: 1rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
-:deep(.p-inputtext::placeholder), :deep(.p-inputtextarea::placeholder) {
-  color: var(--text-tertiary) !important;
+:deep(.p-inputtext::placeholder), :deep(.p-textarea::placeholder) {
+  color: var(--text-tertiary);
 }
 
-:deep(.p-inputtext:focus), :deep(.p-inputtextarea:focus) {
+:deep(.p-inputtext:focus), :deep(.p-textarea:focus) {
   border-color: var(--primary-green);
   background: var(--bg-card);
-  box-shadow: 0 0 0 4px rgba(138, 199, 61, 0.16);
+  box-shadow: var(--focus-ring);
   outline: none;
   transform: translateY(-1px);
 }
@@ -269,50 +269,45 @@ const handleSkip = () => {
 
 :deep(.btn-primary) {
   width: 100%;
-  border: none !important;
-  border-radius: 999px;
-  color: var(--text-inverse) !important;
-  padding: 0.95rem 1.25rem !important;
-  font-weight: 800 !important;
+  border: none;
+  border-radius: var(--radius-full);
+  color: #fff;
+  padding: 0.95rem 1.25rem;
+  font-weight: var(--font-weight-bold);
   font-size: 1rem;
-  background: linear-gradient(135deg, #8ac73d 0%, #85b88f 100%) !important;
-  box-shadow: 0 18px 34px rgba(138, 199, 61, 0.22);
-  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease !important;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-green);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
 }
 
 :deep(.btn-primary:hover:not(:disabled)) {
   transform: translateY(-1px);
-  box-shadow: 0 22px 38px rgba(138, 199, 61, 0.3);
+  box-shadow: var(--shadow-green);
   filter: brightness(1.03);
 }
 
 :deep(.btn-skip) {
   width: 100%;
-  border-radius: 999px;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-color) !important;
-  padding: 0.95rem 1.25rem !important;
-  font-weight: 700 !important;
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.95rem 1.25rem;
+  font-weight: var(--font-weight-bold);
   font-size: 1rem;
-  background: transparent !important;
-  transition: all 0.2s ease !important;
+  background: transparent;
+  transition: all 0.2s ease;
 }
 
 :deep(.btn-skip:hover:not(:disabled)) {
-  background: color-mix(in srgb, var(--bg-secondary) 70%, transparent) !important;
-  border-color: var(--text-secondary) !important;
+  background: color-mix(in srgb, var(--bg-secondary) 70%, transparent);
+  border-color: var(--text-secondary);
 }
 
 [data-theme="dark"] .container {
   background:
-    radial-gradient(circle at top left, rgba(34, 197, 94, 0.12), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.16), transparent 34%),
-    linear-gradient(135deg, var(--bg-primary) 0%, color-mix(in srgb, var(--bg-primary) 85%, #0b1324) 100%);
-}
-
-[data-theme="dark"] .profile-card,
-[data-theme="dark"] .eyebrow {
-  background: color-mix(in srgb, var(--bg-card) 86%, transparent);
+    radial-gradient(circle at top left, var(--primary-green-light), transparent 30%),
+    radial-gradient(circle at bottom right, var(--surface-info-soft), transparent 34%),
+    linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
 }
 
 @media (max-width: 640px) {
@@ -322,7 +317,7 @@ const handleSkip = () => {
 
   .profile-card {
     padding: 1.15rem;
-    border-radius: 1.5rem;
+    border-radius: var(--radius-xl);
   }
 
   .title {

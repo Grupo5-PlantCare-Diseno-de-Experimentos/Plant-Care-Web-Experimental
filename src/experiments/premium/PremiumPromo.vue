@@ -47,19 +47,19 @@ function openModal() {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  border-radius: var(--radius-full, 999px);
-  border: 1px solid color-mix(in srgb, #f5b301 50%, transparent);
-  background: color-mix(in srgb, #f5b301 12%, transparent);
-  color: #b58100;
-  font-size: var(--font-size-sm, 0.875rem);
-  font-weight: 700;
+  border-radius: var(--radius-full);
+  border: 1px solid color-mix(in srgb, var(--premium-gold) 50%, transparent);
+  background: color-mix(in srgb, var(--premium-gold) 12%, transparent);
+  color: var(--premium-gold-strong);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
   text-decoration: none;
 }
 .premium-cta:hover {
   transform: translateY(-1px);
-  background: color-mix(in srgb, #f5b301 20%, transparent);
+  background: color-mix(in srgb, var(--premium-gold) 20%, transparent);
 }
 .premium-cta i { font-size: 0.85em; }
 </style>

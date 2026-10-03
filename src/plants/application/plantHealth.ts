@@ -93,6 +93,11 @@ export function computePlantHealth(plant: Plant): HealthResult {
   });
 
   const latest = metrics[0] as any || null;
+  // Sin lecturas no se puede diagnosticar: se conserva el estado almacenado
+  // en vez de marcarla como crítica por falta de datos.
+  if (!latest) {
+    return { status: plant.status, reason: 'no metrics' };
+  }
   return computeMetricStatus(latest);
 }
 

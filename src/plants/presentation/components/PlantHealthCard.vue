@@ -46,10 +46,10 @@ const metricLabels = computed(() => ({
 }));
 
 function getMeterColor(value: number): string {
-  if (value >= 80) return '#10b981';
-  if (value >= 60) return '#f59e0b';
-  if (value >= 40) return '#ef4444';
-  return '#991b1b';
+  if (value >= 80) return 'var(--status-success)';
+  if (value >= 60) return 'var(--status-warning)';
+  if (value >= 40) return 'var(--status-critical)';
+  return 'var(--status-critical-strong)';
 }
 </script>
 
@@ -95,10 +95,10 @@ function getMeterColor(value: number): string {
 
 <style scoped>
 .health-card {
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   border: 2px solid;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
 }
 
 .health-compact {
@@ -120,14 +120,14 @@ function getMeterColor(value: number): string {
 
 .score-badge .score {
   font-size: 1.25rem;
-  font-weight: 700;
-  color: #1f2937;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
 }
 
 .status-label {
   font-size: 0.85rem;
-  font-weight: 600;
-  color: #6b7280;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -138,7 +138,7 @@ function getMeterColor(value: number): string {
 .health-header {
   margin-bottom: 1.5rem;
   text-align: center;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 1rem;
 }
 
@@ -156,13 +156,13 @@ function getMeterColor(value: number): string {
 .health-score h3 {
   margin: 0;
   font-size: 2rem;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 .health-score p {
   margin: 0;
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .health-metrics {
@@ -181,14 +181,14 @@ function getMeterColor(value: number): string {
 
 .metric-label {
   font-size: 0.85rem;
-  font-weight: 600;
-  color: #4b5563;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
 }
 
 .metric-bar {
   height: 8px;
-  background: #e5e7eb;
-  border-radius: 4px;
+  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
@@ -199,28 +199,28 @@ function getMeterColor(value: number): string {
 
 .metric-value {
   font-size: 0.85rem;
-  font-weight: 600;
-  color: #1f2937;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
   text-align: right;
 }
 
 .health-details {
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-color);
 }
 
 .detail-item {
   margin: 0.5rem 0;
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-secondary);
   padding-left: 1rem;
 }
 
 .detail-item::before {
   content: '→ ';
   margin-right: 0.5rem;
-  color: #a0ffd7;
-  font-weight: 600;
+  color: var(--primary-green);
+  font-weight: var(--font-weight-semibold);
 }
 
 @media (max-width: 768px) {

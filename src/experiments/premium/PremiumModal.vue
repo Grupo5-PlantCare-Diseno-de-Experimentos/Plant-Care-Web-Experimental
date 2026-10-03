@@ -122,7 +122,7 @@ async function startTrial() {
   display: grid;
   place-items: center;
   padding: var(--spacing-lg);
-  background: rgba(0, 0, 0, 0.55);
+  background: color-mix(in srgb, #000 55%, transparent);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
@@ -131,10 +131,10 @@ async function startTrial() {
   position: relative;
   width: 100%;
   max-width: 420px;
-  background: var(--bg-card, #fff);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-2xl, 24px);
-  padding: var(--spacing-2xl, 32px) var(--spacing-xl, 24px);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-2xl) var(--spacing-xl);
   box-shadow: var(--shadow-xl);
   text-align: center;
   animation: pm-pop 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -153,7 +153,7 @@ async function startTrial() {
   height: 32px;
   border-radius: 50%;
   border: 1px solid var(--border-color);
-  background: var(--bg-secondary, #f4f4f5);
+  background: var(--bg-secondary);
   color: var(--text-secondary);
   cursor: pointer;
   display: grid;
@@ -164,16 +164,16 @@ async function startTrial() {
 
 .pm-eyebrow {
   display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--primary-green, #34c759);
+  color: var(--primary-green);
 }
 
 .pm-title {
-  font-size: var(--font-size-xl, 1.4rem);
-  font-weight: 800;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-extrabold);
   color: var(--text-primary);
   margin: var(--spacing-sm) 0;
 }
@@ -200,7 +200,7 @@ async function startTrial() {
   font-size: var(--font-size-sm);
   color: var(--text-primary);
 }
-.pm-benefits i { color: var(--primary-green, #34c759); }
+.pm-benefits i { color: var(--primary-green); }
 
 .pm-price {
   display: flex;
@@ -211,7 +211,7 @@ async function startTrial() {
 }
 .pm-price__amount {
   font-size: 2rem;
-  font-weight: 800;
+  font-weight: var(--font-weight-extrabold);
   color: var(--text-primary);
 }
 .pm-price__period {
@@ -227,10 +227,10 @@ async function startTrial() {
   gap: var(--spacing-sm);
   padding: 14px var(--spacing-lg);
   border: none;
-  border-radius: var(--radius-lg, 14px);
-  background: var(--gradient-primary, var(--primary-green, #34c759));
+  border-radius: var(--radius-lg);
+  background: var(--gradient-primary);
   color: #fff;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-base);
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
@@ -240,8 +240,8 @@ async function startTrial() {
 
 .pm-disclaimer {
   margin: var(--spacing-md) 0 0;
-  font-size: 11px;
-  color: var(--text-tertiary, var(--text-secondary));
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
 }
 
 .pm-thanks__icon { font-size: 3rem; margin-bottom: var(--spacing-sm); }

@@ -116,13 +116,13 @@ export class PlantAnalyticsCalculator {
   static getHealthBadge(score: number): { color: string; emoji: string; label: string } {
     const t = i18n.global.t;
     if (score >= 80) {
-      return { color: '#10b981', emoji: '✅', label: t('watering.healthBadge.healthy') };
+      return { color: 'var(--status-success)', emoji: '✅', label: t('watering.healthBadge.healthy') };
     } else if (score >= 60) {
-      return { color: '#f59e0b', emoji: '⚠️', label: t('watering.healthBadge.fair') };
+      return { color: 'var(--status-warning)', emoji: '⚠️', label: t('watering.healthBadge.fair') };
     } else if (score >= 40) {
-      return { color: '#ef4444', emoji: '🚨', label: t('watering.healthBadge.warning') };
+      return { color: 'var(--status-critical)', emoji: '🚨', label: t('watering.healthBadge.warning') };
     } else {
-      return { color: '#991b1b', emoji: '🆘', label: t('watering.healthBadge.critical') };
+      return { color: 'var(--status-critical-strong)', emoji: '🆘', label: t('watering.healthBadge.critical') };
     }
   }
 

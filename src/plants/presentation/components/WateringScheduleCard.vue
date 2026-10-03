@@ -89,11 +89,11 @@ const handleWater = () => {
 
 <style scoped>
 .watering-card {
-  border-radius: 12px;
-  border: 2px solid #a0ffd7;
-  background: linear-gradient(135deg, rgba(160, 255, 215, 0.1), rgba(102, 217, 255, 0.1));
+  border-radius: var(--radius-md);
+  border: 2px solid color-mix(in srgb, var(--primary-green) 45%, transparent);
+  background: var(--primary-green-light);
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(102, 217, 255, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .watering-header {
@@ -118,38 +118,40 @@ const handleWater = () => {
 .urgency-text h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #1f2937;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
 }
 
 .urgency-text p {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
-.water-button :deep(.p-button) {
-  background: linear-gradient(135deg, #a0ffd7, #66d9ff) !important;
-  border: none !important;
-  color: #042c3d !important;
+.water-button {
+  background: var(--gradient-primary);
+  border: none;
+  color: #fff;
+  box-shadow: var(--shadow-green);
+  transition: transform 0.18s, box-shadow 0.18s;
 }
 
-.water-button :deep(.p-button:hover:not(:disabled)) {
+.water-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(54, 182, 227, 0.3) !important;
+  box-shadow: var(--shadow-green);
 }
 
 .schedule-reason {
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--bg-secondary) 60%, transparent);
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   margin-bottom: 1rem;
 }
 
 .schedule-reason p {
   margin: 0;
   font-size: 0.85rem;
-  color: #4b5563;
+  color: var(--text-secondary);
   line-height: 1.4;
 }
 
@@ -158,10 +160,10 @@ const handleWater = () => {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: #1e8e71;
-  font-weight: 600;
+  color: var(--primary-green);
+  font-weight: var(--font-weight-semibold);
   padding-top: 1rem;
-  border-top: 1px solid rgba(30, 142, 113, 0.2);
+  border-top: 1px solid color-mix(in srgb, var(--primary-green) 20%, transparent);
 }
 
 @media (max-width: 768px) {

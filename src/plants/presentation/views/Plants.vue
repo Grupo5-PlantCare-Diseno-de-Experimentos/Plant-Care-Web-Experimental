@@ -103,6 +103,8 @@ const statusLabel = (s: string) => {
   if (s === 'critical') return t('plants.status.critical');
   return s;
 };
+
+const hasSensor = (plant: Plant): boolean => Boolean(plant.deviceId);
 const toPlant     = (id: number) => router.push(`/plants/${id}`);
 const toNew       = () => router.push('/plants/new');
 
@@ -212,7 +214,13 @@ const latestHumidity = computed((): string | null => {
         <div class="pv-card__body">
           <div>
             <h3 class="pv-card__name">{{ plant.name }}</h3>
-            <p class="pv-card__type">{{ plant.type }}</p>
+            <div class="pv-card__meta">
+              <p class="pv-card__type">{{ plant.type }}</p>
+              <span v-if="!hasSensor(plant)" class="pv-card__no-sensor">
+                <i class="pi pi-wifi"></i>
+                {{ t('plants.card.noSensor') }}
+              </span>
+            </div>
           </div>
 
           <!-- Stats: 2 columns, no phantom columns -->
@@ -643,6 +651,36 @@ const latestHumidity = computed((): string | null => {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--text-tertiary);
+}
+
+.pv-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.pv-card__meta .pv-card__type {
+  margin: 0;
+}
+
+.pv-card__no-sensor {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--surface-muted);
+  border: 1px solid var(--border-color);
+  color: var(--text-tertiary);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pv-card__no-sensor i {
+  font-size: 10px;
 }
 
 /* Stats — 2 real columns, no phantom column */

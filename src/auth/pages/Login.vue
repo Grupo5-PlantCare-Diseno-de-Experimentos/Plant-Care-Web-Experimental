@@ -96,8 +96,8 @@ const handleLogin = async (credentials: { email: string; password: string }) => 
   min-height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at top left, rgba(138, 199, 61, 0.16), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(3, 56, 60, 0.28), transparent 34%),
+    radial-gradient(circle at top left, var(--primary-green-light), transparent 30%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--primary-green) 12%, transparent), transparent 34%),
     linear-gradient(135deg, var(--bg-primary) 0%, color-mix(in srgb, var(--bg-primary) 78%, var(--primary-green-light)) 100%);
   color: var(--text-primary);
 }
@@ -120,7 +120,7 @@ const handleLogin = async (credentials: { email: string; password: string }) => 
   height: 240px;
   top: -70px;
   left: -70px;
-  background: rgba(138, 199, 61, 0.22);
+  background: color-mix(in srgb, var(--primary-green) 22%, transparent);
 }
 
 .orb-2 {
@@ -128,7 +128,7 @@ const handleLogin = async (credentials: { email: string; password: string }) => 
   height: 320px;
   right: -110px;
   bottom: -110px;
-  background: rgba(3, 56, 60, 0.18);
+  background: var(--primary-green-light);
 }
 
 .grid {
@@ -197,12 +197,12 @@ const handleLogin = async (credentials: { email: string; password: string }) => 
 }
 
 .stat {
-  padding: 1rem;
-  border-radius: 1.25rem;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--bg-card) 75%, transparent);
   border: 1px solid var(--border-color);
   backdrop-filter: blur(12px);
-  box-shadow: 0 20px 45px rgba(3, 56, 60, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .stat strong {
@@ -221,13 +221,13 @@ const handleLogin = async (credentials: { email: string; password: string }) => 
   width: 100%;
   max-width: 470px;
   justify-self: end;
-  padding: 2rem;
-  border-radius: 2rem;
-  background: color-mix(in srgb, var(--bg-card) 82%, transparent) !important;
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--bg-card) 82%, transparent);
   border: 1px solid var(--border-color);
   box-shadow:
-    0 24px 70px rgba(3, 56, 60, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    var(--shadow-xl),
+    inset 0 1px 0 color-mix(in srgb, var(--text-inverse) 45%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -243,10 +243,9 @@ const handleLogin = async (credentials: { email: string; password: string }) => 
   height: 3rem;
   display: grid;
   place-items: center;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(138, 199, 61, 0.22), rgba(3, 56, 60, 0.12));
-  color: var(--text-primary);
-  box-shadow: 0 12px 24px rgba(3, 56, 60, 0.08);
+  border-radius: var(--radius-md);
+  background: var(--primary-green-light);
+  color: var(--primary-green);
   font-size: 1.1rem;
 }
 
@@ -275,15 +274,15 @@ h1 {
 }
 
 .error-message {
-  background: rgba(255, 235, 235, 0.95);
-  color: #8b1d1d;
-  border-color: rgba(139, 29, 29, 0.16);
+  background: var(--surface-danger-soft);
+  color: var(--status-critical);
+  border-color: color-mix(in srgb, var(--status-critical) 25%, transparent);
 }
 
 .info-message {
-  background: rgba(3, 56, 60, 0.08);
+  background: var(--surface-info-soft);
   color: var(--text-primary);
-  border-color: rgba(3, 56, 60, 0.14);
+  border-color: color-mix(in srgb, var(--status-info) 25%, transparent);
 }
 
 .signup-section {
@@ -304,20 +303,20 @@ h1 {
   align-items: center;
   justify-content: center;
   padding: 0.8rem 1.15rem;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #8ac73d 0%, #85b88f 100%);
-  color: var(--text-inverse);
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: #fff;
   text-decoration: none;
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.01em;
-  box-shadow: 0 16px 30px rgba(138, 199, 61, 0.22);
+  box-shadow: var(--shadow-green);
   transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
 }
 
 .signup-link:hover {
   transform: translateY(-1px);
   filter: brightness(1.03);
-  box-shadow: 0 20px 36px rgba(138, 199, 61, 0.28);
+  box-shadow: var(--shadow-green);
 }
 
 @media (max-width: 980px) {
@@ -360,34 +359,11 @@ h1 {
   }
 }
 
-:deep(.p-inputtext) {
-  background: var(--bg-card) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-color) !important;
-}
-
-:deep(.p-inputtext::placeholder) {
-  color: var(--text-tertiary) !important;
-}
-
-:deep(.p-inputtext:focus) {
-  background: var(--bg-card) !important;
-  border-color: var(--primary-green) !important;
-  box-shadow: 0 0 0 3px rgba(138, 199, 61, 0.25);
-  outline: none;
-}
-
 [data-theme="dark"] .login-page {
   background:
-    radial-gradient(circle at top left, rgba(34, 197, 94, 0.12), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.16), transparent 34%),
-    linear-gradient(135deg, var(--bg-primary) 0%, color-mix(in srgb, var(--bg-primary) 85%, #0b1324) 100%);
-}
-
-[data-theme="dark"] .brand-badge,
-[data-theme="dark"] .stat,
-[data-theme="dark"] .login-card {
-  background: color-mix(in srgb, var(--bg-card) 86%, transparent) !important;
+    radial-gradient(circle at top left, var(--primary-green-light), transparent 30%),
+    radial-gradient(circle at bottom right, var(--surface-info-soft), transparent 34%),
+    linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
 }
 </style>
 

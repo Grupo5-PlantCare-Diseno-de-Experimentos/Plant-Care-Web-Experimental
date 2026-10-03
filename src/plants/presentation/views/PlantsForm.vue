@@ -44,6 +44,27 @@
         </div>
 
         <div class="pf-field">
+          <label for="deviceId">{{ t('plantForm.field.deviceId') }}</label>
+          <select id="deviceId" v-model="sensorChoice" class="pf-select">
+            <option value="">{{ t('plantForm.sensor.none') }}</option>
+            <option
+              v-for="device in detectedDevices"
+              :key="device.deviceId"
+              :value="device.deviceId"
+            >
+              {{ device.deviceId }}
+            </option>
+            <option value="__manual__">{{ t('plantForm.sensor.manual') }}</option>
+          </select>
+          <InputText
+            v-if="sensorChoice === '__manual__'"
+            v-model="form.deviceId"
+            :placeholder="t('plantForm.placeholder.deviceId')"
+          />
+          <small class="pf-hint">{{ t('plantForm.hint.deviceId') }}</small>
+        </div>
+
+        <div class="pf-field">
           <label for="bio">{{ t('plantForm.field.bio') }}</label>
           <Textarea id="bio" v-model="form.bio" rows="4" :placeholder="t('plantForm.placeholder.bio')" />
         </div>
@@ -67,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, computed, ref } from 'vue';
+import { reactive, onMounted, computed, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../../../auth/store/authStore';
 import InputText from 'primevue/inputtext';
@@ -89,17 +110,34 @@ const emptyState = (): Partial<Plant> => ({
   type: '',
   imgUrl: '',
   bio: '',
-  location: ''
+  location: '',
+  deviceId: ''
 });
 
 const form = reactive<Partial<Plant>>({ ...emptyState() });
 const errors = reactive<Record<string, string>>({});
 const serverError = reactive<{ message: string | null }>({ message: null });
 const isSubmitting = ref(false);
+const detectedDevices = ref<Array<{ deviceId: string; lastSeen: string | null }>>([]);
+const sensorChoice = ref('');
 
 const isEditing = computed(() => !!route.params.id);
 
+watch(sensorChoice, (choice) => {
+  if (choice !== '__manual__') form.deviceId = choice;
+});
+
+async function loadDetectedDevices() {
+  try {
+    detectedDevices.value = await plantsService.getDetectedDevices();
+  } catch {
+    detectedDevices.value = [];
+  }
+}
+
 onMounted(async () => {
+  await loadDetectedDevices();
+
   if (isEditing.value) {
     try {
       const response = await plantsService.getPlantById(route.params.id as string);
@@ -111,10 +149,24 @@ onMounted(async () => {
           location: response.data.location,
           bio: response.data.bio,
         });
+
+        const paired = (response.data.deviceId || '').trim();
+        if (paired) {
+          if (detectedDevices.value.some((device) => device.deviceId === paired)) {
+            sensorChoice.value = paired;
+          } else {
+            form.deviceId = paired;
+            sensorChoice.value = '__manual__';
+          }
+        } else {
+          sensorChoice.value = detectedDevices.value.length ? '' : '__manual__';
+        }
       }
     } catch (err) {
       serverError.message = t('plantForm.error.loadFailed');
     }
+  } else {
+    sensorChoice.value = detectedDevices.value.length ? '' : '__manual__';
   }
 });
 
@@ -146,7 +198,8 @@ const onSubmit = async () => {
     type: String(form.type || '').trim(),
     imgUrl: String(form.imgUrl || '').trim() || 'https://via.placeholder.com/180',
     bio: String(form.bio || '').trim(),
-    location: String(form.location || '').trim()
+    location: String(form.location || '').trim(),
+    deviceId: String(form.deviceId || '').trim()
   };
 
   try {
@@ -157,7 +210,8 @@ const onSubmit = async () => {
         type: payload.type,
         imgUrl: payload.imgUrl,
         bio: payload.bio,
-        location: payload.location
+        location: payload.location,
+        deviceId: payload.deviceId
       });
     } else {
       const createResponse = await plantsService.createPlant(payload);
@@ -191,6 +245,8 @@ const onSubmit = async () => {
 
 const onReset = () => {
   Object.assign(form, emptyState());
+  sensorChoice.value = detectedDevices.value.length ? '' : '__manual__';
+  serverError.message = null;
 };
 
 const goBack = () => {
@@ -199,26 +255,20 @@ const goBack = () => {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap');
-
 .pf-wrap {
-  --glass-light: linear-gradient(155deg, rgba(255, 255, 255, 0.85), rgba(230, 248, 255, 0.66));
-  --glass-border: rgba(14, 58, 78, 0.14);
-  --deep-ink: #0e2c3a;
   max-width: 560px;
   margin: 1.5rem auto;
   padding: 0 1rem;
-  color: var(--deep-ink);
+  color: var(--text-primary);
   position: relative;
   isolation: isolate;
-  font-family: 'Space Grotesk', sans-serif;
 }
 
 .pf-wrap::before,
 .pf-wrap::after {
   content: '';
   position: absolute;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   filter: blur(52px);
   opacity: 0.35;
   z-index: -1;
@@ -230,7 +280,7 @@ const goBack = () => {
   height: 220px;
   top: -30px;
   right: -60px;
-  background: #a8fff0;
+  background: var(--primary-green-light);
 }
 
 .pf-wrap::after {
@@ -238,23 +288,24 @@ const goBack = () => {
   height: 180px;
   left: -50px;
   bottom: -20px;
-  background: #89dfff;
+  background: var(--surface-info-soft);
 }
 
 .back-button {
   margin-bottom: 1rem;
-  border-radius: 12px;
-  border: 1px solid rgba(22, 77, 96, 0.22);
-  color: #25566a;
-  font: 600 0.85rem/1 'Space Grotesk', sans-serif;
-  background: rgba(255, 255, 255, 0.58);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-semibold);
+  background: color-mix(in srgb, var(--bg-secondary) 58%, transparent);
 }
 
 .pf-card {
-  background: var(--glass-light);
+  background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 22px;
-  box-shadow: 0 14px 38px rgba(14, 62, 78, 0.13);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   padding: 2rem 1.75rem 1.75rem;
@@ -264,14 +315,17 @@ const goBack = () => {
   margin: 0 0 0.3rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: #1e8e71;
-  font: 600 0.72rem/1 'Space Grotesk', sans-serif;
+  color: var(--primary-green);
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-semibold);
 }
 
 .pf-title {
   margin: 0 0 1rem;
-  color: #102d3a;
-  font: 700 clamp(1.4rem, 3vw, 1.8rem) / 1.1 'Sora', sans-serif;
+  color: var(--text-primary);
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
   letter-spacing: -0.025em;
 }
 
@@ -280,11 +334,12 @@ const goBack = () => {
   align-items: center;
   gap: 0.35rem;
   padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(23, 101, 123, 0.24);
-  background: rgba(210, 255, 241, 0.7);
-  color: #226057;
-  font: 600 0.72rem/1 'Space Grotesk', sans-serif;
+  border-radius: var(--radius-full);
+  border: 1px solid color-mix(in srgb, var(--status-success) 25%, transparent);
+  background: var(--surface-success-soft);
+  color: var(--status-success);
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 1.4rem;
@@ -309,38 +364,67 @@ const goBack = () => {
 }
 
 .pf-field label {
-  font: 600 0.72rem/1 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: #4c7281;
+  color: var(--text-secondary);
 }
 
-/* Override PrimeVue InputText & Textarea to match glass aesthetic */
+/* PrimeVue InputText & Textarea alineados a los tokens */
 .pf-field :deep(.p-inputtext),
 .pf-field :deep(.p-textarea) {
-  background: rgba(255, 255, 255, 0.72) !important;
-  border: 1px solid rgba(19, 75, 93, 0.2) !important;
-  border-radius: 12px !important;
-  font: 500 0.9rem/1.4 'Space Grotesk', sans-serif !important;
-  color: #0e2c3a !important;
-  box-shadow: none !important;
-  transition: border-color 0.18s, box-shadow 0.18s !important;
+  background: color-mix(in srgb, var(--bg-card) 80%, transparent);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  box-shadow: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
 }
 
 .pf-field :deep(.p-inputtext:focus),
 .pf-field :deep(.p-textarea:focus) {
-  border-color: rgba(30, 142, 113, 0.55) !important;
-  box-shadow: 0 0 0 3px rgba(30, 142, 113, 0.12) !important;
+  border-color: var(--primary-green);
+  box-shadow: var(--focus-ring);
+}
+
+.pf-select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--bg-card) 80%, transparent);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.pf-select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: var(--focus-ring);
+}
+
+.pf-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .pf-hint {
-  font: 500 0.75rem/1.3 'Space Grotesk', sans-serif;
-  color: #6b9aaa;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-tertiary);
 }
 
 .pf-error {
-  font: 500 0.75rem/1.2 'Space Grotesk', sans-serif;
-  color: #c0392b;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--status-critical);
 }
 
 .pf-server-error {
@@ -348,16 +432,17 @@ const goBack = () => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.65rem 0.9rem;
-  background: rgba(220, 0, 0, 0.05);
-  border: 1px solid rgba(220, 0, 0, 0.14);
-  border-radius: 10px;
-  font: 500 0.82rem/1.4 'Space Grotesk', sans-serif;
-  color: #a83228;
+  background: var(--surface-danger-soft);
+  border: 1px solid color-mix(in srgb, var(--status-critical) 25%, transparent);
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--status-critical);
 }
 
 .pf-divider {
   border: none;
-  border-top: 1px solid rgba(14, 58, 78, 0.11);
+  border-top: 1px solid var(--border-color);
   margin: 0.2rem 0;
 }
 
@@ -368,36 +453,38 @@ const goBack = () => {
 }
 
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.5) !important;
-  border: 1px solid rgba(19, 75, 93, 0.22) !important;
-  border-radius: 50px !important;
-  color: #2d6478 !important;
-  font: 700 0.78rem/1 'Space Grotesk', sans-serif !important;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.03em;
   text-transform: uppercase;
   transition: background 0.18s, transform 0.15s;
 }
 
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.82) !important;
+  background: color-mix(in srgb, var(--bg-secondary) 82%, transparent);
   transform: translateY(-1px);
 }
 
 .btn-primary {
-  background: linear-gradient(130deg, #a0ffd7, #66d9ff) !important;
-  border: none !important;
-  border-radius: 50px !important;
-  color: #083348 !important;
-  font: 700 0.78rem/1 'Space Grotesk', sans-serif !important;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  box-shadow: 0 10px 22px rgba(54, 182, 227, 0.28) !important;
-  transition: transform 0.18s, box-shadow 0.18s !important;
+  box-shadow: var(--shadow-green);
+  transition: transform 0.18s, box-shadow 0.18s;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 26px rgba(48, 172, 217, 0.34) !important;
+  box-shadow: var(--shadow-green);
 }
 
 @media (max-width: 540px) {
@@ -408,45 +495,5 @@ const goBack = () => {
   .pf-card {
     padding: 1.4rem 1.1rem;
   }
-}
-
-@media (prefers-color-scheme: dark) {
-  .pf-wrap {
-    --glass-light: linear-gradient(155deg, rgba(8, 28, 37, 0.86), rgba(10, 43, 55, 0.72));
-    --glass-border: rgba(161, 229, 245, 0.18);
-    --deep-ink: #d5f5ff;
-  }
-
-  .back-button {
-    color: #bfefff;
-    border-color: rgba(161, 229, 245, 0.2);
-    background: rgba(5, 35, 46, 0.6);
-  }
-
-  .pf-title { color: #d5f5ff; }
-  .pf-field label { color: #7ab8c8; }
-  .pf-hint { color: #4a8fa0; }
-  .pf-status-chip {
-    background: rgba(5, 40, 50, 0.7);
-    border-color: rgba(161, 229, 245, 0.2);
-    color: #c8f7e8;
-  }
-
-  .pf-field :deep(.p-inputtext),
-  .pf-field :deep(.p-textarea) {
-    background: rgba(5, 35, 46, 0.55) !important;
-    border-color: rgba(161, 229, 245, 0.18) !important;
-    color: #d5f5ff !important;
-  }
-
-  .btn-ghost {
-    color: #bfefff !important;
-    border-color: rgba(161, 229, 245, 0.2) !important;
-    background: rgba(5, 35, 46, 0.5) !important;
-  }
-
-  .btn-primary { color: #042c3d !important; }
-
-  .pf-divider { border-color: rgba(161, 229, 245, 0.12); }
 }
 </style>

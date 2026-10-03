@@ -255,10 +255,10 @@ async function onSignUp(): Promise<void> {
   justify-content: center;
   padding: 1.25rem;
   background:
-    radial-gradient(circle at top left, rgba(138, 199, 61, 0.16), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(3, 56, 60, 0.24), transparent 34%),
-    linear-gradient(135deg, #f7f7ed 0%, #edf3e1 100%);
-  color: #002933;
+    radial-gradient(circle at top left, var(--primary-green-light), transparent 30%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--primary-green) 12%, transparent), transparent 34%),
+    linear-gradient(135deg, var(--bg-primary) 0%, color-mix(in srgb, var(--bg-primary) 78%, var(--primary-green-light)) 100%);
+  color: var(--text-primary);
 }
 
 .bg-orbit {
@@ -273,7 +273,7 @@ async function onSignUp(): Promise<void> {
   height: 260px;
   top: -90px;
   left: -90px;
-  background: rgba(138, 199, 61, 0.22);
+  background: color-mix(in srgb, var(--primary-green) 22%, transparent);
 }
 
 .bg-orbit-2 {
@@ -281,15 +281,15 @@ async function onSignUp(): Promise<void> {
   height: 340px;
   right: -120px;
   bottom: -120px;
-  background: rgba(3, 56, 60, 0.16);
+  background: var(--primary-green-light);
 }
 
 .bg-grid {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(0, 41, 51, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 41, 51, 0.04) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--text-primary) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--text-primary) 8%, transparent) 1px, transparent 1px);
   background-size: 42px 42px;
   mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 88%);
   pointer-events: none;
@@ -300,13 +300,13 @@ async function onSignUp(): Promise<void> {
   z-index: 1;
   width: 100%;
   max-width: 520px;
-  padding: 2rem;
-  border-radius: 2rem;
-  background: rgba(247, 247, 237, 0.8);
-  border: 1px solid rgba(3, 56, 60, 0.12);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--bg-card) 84%, transparent);
+  border: 1px solid var(--border-color);
   box-shadow:
-    0 24px 70px rgba(3, 56, 60, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    var(--shadow-xl),
+    inset 0 1px 0 color-mix(in srgb, var(--text-inverse) 50%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -323,19 +323,19 @@ async function onSignUp(): Promise<void> {
   height: 96px;
   display: grid;
   place-items: center;
-  border-radius: 28px;
+  border-radius: var(--radius-2xl);
   padding: 0.8rem;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, rgba(138, 199, 61, 0.18), rgba(3, 56, 60, 0.08));
-  border: 1px solid rgba(3, 56, 60, 0.12);
-  box-shadow: 0 18px 40px rgba(3, 56, 60, 0.08);
+  background: var(--primary-green-light);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .logo-image {
   max-width: 70px;
   width: 100%;
   height: auto;
-  border-radius: 14px;
+  border-radius: var(--radius-md);
 }
 
 .eyebrow {
@@ -344,26 +344,26 @@ async function onSignUp(): Promise<void> {
   gap: 0.45rem;
   padding: 0.45rem 0.75rem;
   margin-bottom: 0.8rem;
-  border-radius: 999px;
-  border: 1px solid rgba(3, 56, 60, 0.12);
-  background: rgba(247, 247, 237, 0.72);
-  color: #03383c;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--bg-card) 74%, transparent);
+  color: var(--primary-green);
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .title {
-  color: #002933;
+  color: var(--text-primary);
   font-size: clamp(1.8rem, 3vw, 2.35rem);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.05em;
   margin-bottom: 0.45rem;
 }
 
 .subtitle {
-  color: rgba(0, 41, 51, 0.72);
+  color: var(--text-secondary);
   font-size: 0.96rem;
   line-height: 1.6;
 }
@@ -380,8 +380,8 @@ async function onSignUp(): Promise<void> {
 
 .form-label {
   display: block;
-  color: #002933;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
   font-size: 0.95rem;
   letter-spacing: -0.01em;
 }
@@ -389,9 +389,9 @@ async function onSignUp(): Promise<void> {
 .password-strength {
   margin-top: 0.35rem;
   padding: 0.95rem;
-  border-radius: 1rem;
-  background: rgba(3, 56, 60, 0.05);
-  border: 1px solid rgba(3, 56, 60, 0.08);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+  border: 1px solid var(--border-color);
 }
 
 .strength-indicator {
@@ -406,8 +406,8 @@ async function onSignUp(): Promise<void> {
   width: 108px;
   height: 8px;
   overflow: hidden;
-  border-radius: 999px;
-  background: rgba(0, 41, 51, 0.1);
+  border-radius: var(--radius-full);
+  background: var(--border-color);
 }
 
 .strength-bar::after {
@@ -421,17 +421,17 @@ async function onSignUp(): Promise<void> {
 
 .strength-bar.strength-weak::after {
   width: 33%;
-  background: linear-gradient(135deg, #8ac73d, #85b88f);
+  background: var(--status-critical);
 }
 
 .strength-bar.strength-good::after {
   width: 66%;
-  background: linear-gradient(135deg, #85b88f, #8ac73d);
+  background: var(--status-warning);
 }
 
 .strength-bar.strength-strong::after {
   width: 100%;
-  background: linear-gradient(135deg, #03383c, #8ac73d);
+  background: var(--status-success);
 }
 
 @keyframes fillBar {
@@ -440,18 +440,18 @@ async function onSignUp(): Promise<void> {
 
 .strength-text {
   font-size: 0.9rem;
-  color: rgba(0, 41, 51, 0.82);
+  color: var(--text-secondary);
 }
 
 .requirements {
   font-size: 0.86rem;
-  color: rgba(0, 41, 51, 0.72);
+  color: var(--text-secondary);
 }
 
 .requirements-label {
   margin: 0 0 0.45rem 0;
-  font-weight: 700;
-  color: #03383c;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
 }
 
 .requirements ul {
@@ -463,58 +463,58 @@ async function onSignUp(): Promise<void> {
 }
 
 .requirements li {
-  color: rgba(0, 41, 51, 0.78);
+  color: var(--text-secondary);
 }
 
 .requirements li::before {
   content: '• ';
-  color: #8ac73d;
-  font-weight: 900;
+  color: var(--primary-green);
+  font-weight: var(--font-weight-bold);
 }
 
 .requirements-met {
   font-size: 0.9rem;
-  color: #03383c;
-  font-weight: 600;
+  color: var(--status-success);
+  font-weight: var(--font-weight-semibold);
 }
 
 :deep(.p-inputtext) {
   width: 100%;
   padding: 0.95rem 1rem;
-  border: 1px solid rgba(3, 56, 60, 0.14);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.55);
-  color: #002933 !important;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--bg-card) 78%, transparent);
+  color: var(--text-primary);
   font-size: 1rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
 :deep(.p-inputtext::placeholder) {
-  color: rgba(0, 41, 51, 0.45) !important;
+  color: var(--text-tertiary);
 }
 
 :deep(.p-inputtext:focus) {
-  border-color: rgba(138, 199, 61, 0.95);
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 0 0 4px rgba(138, 199, 61, 0.16);
+  border-color: var(--primary-green);
+  background: var(--bg-card);
+  box-shadow: var(--focus-ring);
   outline: none;
   transform: translateY(-1px);
 }
 
 :deep(.p-inputtext.p-invalid) {
-  border-color: rgba(220, 38, 38, 0.6);
-  background: rgba(255, 244, 244, 0.88);
+  border-color: var(--status-critical);
+  background: var(--surface-danger-soft);
 }
 
 .form-error {
-  color: #b42318;
+  color: var(--status-critical);
   font-size: 0.84rem;
   margin-top: 0.1rem;
   display: block;
 }
 
 .form-info {
-  color: #03383c;
+  color: var(--status-success);
   font-size: 0.84rem;
   margin-top: 0.1rem;
   display: block;
@@ -528,20 +528,20 @@ async function onSignUp(): Promise<void> {
 
 :deep(.btn-register) {
   width: 100%;
-  border: none !important;
-  border-radius: 999px;
-  color: #002933 !important;
-  padding: 0.95rem 1.25rem !important;
-  font-weight: 800 !important;
+  border: none;
+  border-radius: var(--radius-full);
+  color: #fff;
+  padding: 0.95rem 1.25rem;
+  font-weight: var(--font-weight-bold);
   font-size: 1rem;
-  background: linear-gradient(135deg, #8ac73d 0%, #85b88f 100%) !important;
-  box-shadow: 0 18px 34px rgba(138, 199, 61, 0.22);
-  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease !important;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-green);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
 }
 
 :deep(.btn-register:hover:not(:disabled)) {
   transform: translateY(-1px);
-  box-shadow: 0 22px 38px rgba(138, 199, 61, 0.3);
+  box-shadow: var(--shadow-green);
   filter: brightness(1.03);
 }
 
@@ -552,11 +552,11 @@ async function onSignUp(): Promise<void> {
 
 .error-alert {
   margin-top: 0.2rem;
-  background: rgba(255, 235, 235, 0.95);
-  color: #8b1d1d;
+  background: var(--surface-danger-soft);
+  color: var(--status-critical);
   padding: 0.95rem 1rem;
-  border-radius: 1rem;
-  border: 1px solid rgba(139, 29, 29, 0.16);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--status-critical) 25%, transparent);
   font-size: 0.94rem;
   line-height: 1.5;
 }
@@ -564,12 +564,12 @@ async function onSignUp(): Promise<void> {
 .navigation-section {
   margin-top: 1.5rem;
   padding-top: 1.2rem;
-  border-top: 1px solid rgba(3, 56, 60, 0.1);
+  border-top: 1px solid var(--border-color);
   text-align: center;
 }
 
 .navigation-text {
-  color: rgba(0, 41, 51, 0.72);
+  color: var(--text-secondary);
   font-size: 0.95rem;
   margin-bottom: 0.7rem;
 }
@@ -578,20 +578,20 @@ async function onSignUp(): Promise<void> {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #03383c;
-  font-weight: 800;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
   text-decoration: none;
   padding: 0.8rem 1.1rem;
-  border-radius: 999px;
-  border: 1px solid rgba(3, 56, 60, 0.12);
-  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--bg-secondary) 40%, transparent);
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .signin-link:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 14px 30px rgba(3, 56, 60, 0.08);
+  background: color-mix(in srgb, var(--bg-secondary) 70%, transparent);
+  box-shadow: var(--shadow-sm);
 }
 
 @media (max-width: 640px) {
@@ -601,7 +601,7 @@ async function onSignUp(): Promise<void> {
 
   .signup-card {
     padding: 1.15rem;
-    border-radius: 1.5rem;
+    border-radius: var(--radius-xl);
   }
 
   .title {

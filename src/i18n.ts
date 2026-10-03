@@ -34,6 +34,7 @@ const messages = {
       nav: {
         dashboard: 'Dashboard',
         plants: 'Plantas',
+        ai: 'Asistente IA',
         settings: 'Configuración',
         profile: 'Perfil',
         analytics: 'Analíticas'
@@ -136,6 +137,46 @@ const messages = {
         needsReview: 'Necesita revisión'
       },
       noLocation: 'Sin ubicación'
+    },
+    ai: {
+      title: 'Asistente IA',
+      subtitle: 'Pregunta sobre salud, riego y métricas de tus plantas',
+      empty: 'Aún no hay mensajes. Prueba con “¿Qué planta necesita riego?”',
+      hint: 'Las respuestas usan tus datos agregados y pueden requerir conexión.',
+      diagnosis: {
+        plantLabel: 'Planta para diagnóstico'
+      },
+      history: {
+        title: 'Conversaciones',
+        new: 'Nueva conversación',
+        empty: 'Aún no tienes conversaciones guardadas.',
+        searchPlaceholder: 'Buscar conversaciones…',
+        deleteLabel: 'Eliminar conversación',
+        renameLabel: 'Renombrar conversación',
+        renameSave: 'Guardar',
+        renameCancel: 'Cancelar',
+        deleteConfirmTitle: 'Eliminar conversación',
+        deleteConfirmMessage: '¿Eliminar “{title}”? Esta acción no se puede deshacer.',
+        deleteConfirmYes: 'Eliminar',
+        deleteConfirmNo: 'Conservar',
+        deletedOk: 'Conversación eliminada',
+        deleteError: 'No se pudo eliminar la conversación',
+        renamedOk: 'Conversación renombrada',
+        renameEmpty: 'Escribe un título válido',
+        noResults: 'Sin resultados para “{query}”.'
+      },
+      thread: {
+        backToBottom: 'Ir al final'
+      },
+      insights: {
+        eyebrow: 'IA',
+        title: 'Resumen inteligente',
+        subtitle: 'Tendencia, anomalías y acciones de tus analíticas',
+        generate: 'Generar resumen',
+        clear: 'Limpiar',
+        hint: 'Genera un resumen con Gemini a partir de tus promedios agregados.',
+        fallback: 'No se pudo generar el resumen. Anomalías detectadas: {anomalies}'
+      }
     },
     analytics: {
       header: {
@@ -264,7 +305,8 @@ const messages = {
         view: 'Ver {name}',
         options: 'Opciones',
         humidity: 'Humedad',
-        lastWatered: 'Ultimo riego'
+        lastWatered: 'Ultimo riego',
+        noSensor: 'Sin sensor'
       },
       status: {
         healthy: 'Saludable',
@@ -283,6 +325,7 @@ const messages = {
       back: 'Plantas',
       backAria: 'Volver a plantas',
       live: 'En vivo',
+      noSensor: 'Sin sensor',
       connectedProfile: 'Perfil conectado',
       section: {
         liveTelemetry: 'Telemetria en vivo',
@@ -374,17 +417,24 @@ const messages = {
         type: 'Tipo',
         image: 'URL de imagen',
         location: 'Ubicación',
-        bio: 'Descripción'
+        bio: 'Descripción',
+        deviceId: 'Sensor'
       },
       placeholder: {
         name: 'Ej. Monstera Deliciosa',
         type: 'Ej. Tropical, Suculenta',
         image: 'https://...',
         location: 'Ej. Sala',
-        bio: 'Describe tu planta...'
+        bio: 'Describe tu planta...',
+        deviceId: 'Ej. esp32-wokwi-01'
       },
       hint: {
-        image: 'Puedes pegar una URL de imagen de la web.'
+        image: 'Puedes pegar una URL de imagen de la web.',
+        deviceId: 'Elige un sensor detectado o escríbelo igual que en tu ESP32.'
+      },
+      sensor: {
+        none: 'Sin sensor',
+        manual: 'Otro (escribir a mano)'
       },
       error: {
         nameRequired: 'El nombre es obligatorio',
@@ -680,6 +730,7 @@ const messages = {
       nav: {
         dashboard: 'Dashboard',
         plants: 'Plants',
+        ai: 'AI Assistant',
         settings: 'Settings',
         profile: 'Profile',
         analytics: 'Analytics'
@@ -782,6 +833,46 @@ const messages = {
         needsReview: 'Needs review'
       },
       noLocation: 'No location'
+    },
+    ai: {
+      title: 'AI Assistant',
+      subtitle: 'Ask about health, watering and metrics of your plants',
+      empty: 'No messages yet. Try “Which plant needs watering?”',
+      hint: 'Answers use your aggregated data and may require connection.',
+      diagnosis: {
+        plantLabel: 'Plant for diagnosis'
+      },
+      history: {
+        title: 'Conversations',
+        new: 'New conversation',
+        empty: 'You have no saved conversations yet.',
+        searchPlaceholder: 'Search conversations…',
+        deleteLabel: 'Delete conversation',
+        renameLabel: 'Rename conversation',
+        renameSave: 'Save',
+        renameCancel: 'Cancel',
+        deleteConfirmTitle: 'Delete conversation',
+        deleteConfirmMessage: 'Delete “{title}”? This cannot be undone.',
+        deleteConfirmYes: 'Delete',
+        deleteConfirmNo: 'Keep',
+        deletedOk: 'Conversation deleted',
+        deleteError: 'Could not delete the conversation',
+        renamedOk: 'Conversation renamed',
+        renameEmpty: 'Type a valid title',
+        noResults: 'No results for “{query}”.'
+      },
+      thread: {
+        backToBottom: 'Go to latest'
+      },
+      insights: {
+        eyebrow: 'AI',
+        title: 'Smart summary',
+        subtitle: 'Trend, anomalies and actions from your analytics',
+        generate: 'Generate summary',
+        clear: 'Clear',
+        hint: 'Generate a Gemini summary from your aggregated averages.',
+        fallback: 'Could not generate the summary. Detected anomalies: {anomalies}'
+      }
     },
     analytics: {
       header: {
@@ -910,7 +1001,8 @@ const messages = {
         view: 'View {name}',
         options: 'Options',
         humidity: 'Humidity',
-        lastWatered: 'Last watered'
+        lastWatered: 'Last watered',
+        noSensor: 'No sensor'
       },
       status: {
         healthy: 'Healthy',
@@ -929,6 +1021,7 @@ const messages = {
       back: 'Plants',
       backAria: 'Back to Plants',
       live: 'Live',
+      noSensor: 'No sensor',
       connectedProfile: 'Connected Profile',
       section: {
         liveTelemetry: 'Live Telemetry',
@@ -1020,17 +1113,24 @@ const messages = {
         type: 'Type',
         image: 'Image URL',
         location: 'Location',
-        bio: 'Bio'
+        bio: 'Bio',
+        deviceId: 'Sensor'
       },
       placeholder: {
         name: 'e.g. Monstera Deliciosa',
         type: 'e.g. Tropical, Succulent',
         image: 'https://...',
         location: 'e.g. Living Room',
-        bio: 'Describe your plant...'
+        bio: 'Describe your plant...',
+        deviceId: 'e.g. esp32-wokwi-01'
       },
       hint: {
-        image: 'You can paste an image URL from the web.'
+        image: 'You can paste an image URL from the web.',
+        deviceId: 'Pick a detected sensor or type it exactly as in your ESP32.'
+      },
+      sensor: {
+        none: 'No sensor',
+        manual: 'Other (type manually)'
       },
       error: {
         nameRequired: 'Name is required',

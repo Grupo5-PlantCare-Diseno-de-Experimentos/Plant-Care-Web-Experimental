@@ -4,6 +4,7 @@ import Button from 'primevue/button';
 import { useI18n } from 'vue-i18n';
 
 import { useAuthStore } from '../../../auth/store/authStore';
+import { useTheme } from '../composables/useTheme';
 
 interface HeaderProps {
   sidebarOpen?: boolean;
@@ -26,14 +27,12 @@ const userName = computed(() => {
   return t('sidebar.guest');
 });
 
-const theme = ref<'light' | 'dark'>('light');
+const { isDark, toggle } = useTheme();
 const isToggling = ref(false);
 
 const toggleTheme = () => {
   isToggling.value = true;
-  const newTheme = theme.value === 'light' ? 'dark' : 'light';
-  theme.value = newTheme;
-  document.documentElement.setAttribute('data-theme', newTheme);
+  toggle();
   setTimeout(() => {
     isToggling.value = false;
   }, 500);
@@ -78,7 +77,7 @@ const handleMenuClick = () => {
       <button
           class="theme-switch"
           @click="toggleTheme"
-          :class="{ 'is-dark': theme === 'dark', 'toggling': isToggling }"
+          :class="{ 'is-dark': isDark, 'toggling': isToggling }"
       >
         <span class="switch-track">
           <span class="switch-icon sun">
@@ -89,17 +88,15 @@ const handleMenuClick = () => {
           </span>
           <span class="switch-thumb"></span>
         </span>
-        <span class="switch-label">{{ theme === 'light' ? t('header.theme.dark') : t('header.theme.light') }}</span>
+        <span class="switch-label">{{ isDark ? t('header.theme.light') : t('header.theme.dark') }}</span>
       </button>
     </div>
   </header>
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap');
-
 /* ----------------------------------------------------------
-   HEADER – Diseño glass futurista con efectos “wow”
+   HEADER – Glass sutil sobre los tokens globales
    ---------------------------------------------------------- */
 .header {
   background: var(--bg-card);
@@ -112,7 +109,6 @@ const handleMenuClick = () => {
   justify-content: space-between;
   position: relative;
   z-index: 99;
-  font-family: 'Space Grotesk', sans-serif;
   overflow: hidden; /* para contener partículas */
 }
 
@@ -124,11 +120,11 @@ const handleMenuClick = () => {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--primary-green) 20%, 
-    #66d9ff 50%, 
-    var(--primary-green) 80%, 
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--primary-green) 20%,
+    var(--secondary-green) 50%,
+    var(--primary-green) 80%,
     transparent 100%);
   opacity: 0;
   transition: opacity 0.6s ease;
@@ -144,10 +140,10 @@ const handleMenuClick = () => {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(52, 199, 89, 0.15) 0%, transparent 20%),
-    radial-gradient(circle at 80% 20%, rgba(102, 217, 255, 0.1) 0%, transparent 30%),
-    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 40%);
+  background-image:
+    radial-gradient(circle at 20% 80%, var(--surface-success-soft) 0%, transparent 20%),
+    radial-gradient(circle at 80% 20%, var(--surface-info-soft) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--text-primary) 5%, transparent) 0%, transparent 40%);
   opacity: 0.8;
   animation: particlePulse 8s infinite alternate;
   pointer-events: none;
@@ -235,22 +231,12 @@ const handleMenuClick = () => {
 }
 
 .greeting {
-  font-family: 'Sora', sans-serif;
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.02em;
   white-space: nowrap;
-}
-
-.gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: var(--font-weight-extrabold);
-  position: relative;
 }
 
 .greeting-sub {
@@ -288,7 +274,6 @@ const handleMenuClick = () => {
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
   box-shadow: var(--shadow-sm);
   outline: none;
-  border: 1px solid var(--border-color);
 }
 
 .theme-switch:hover {
@@ -323,7 +308,7 @@ const handleMenuClick = () => {
 }
 
 .is-dark .switch-track {
-  background: #1c1c1e;
+  background: var(--bg-secondary);
 }
 
 /* Íconos de sol y luna */
@@ -351,7 +336,7 @@ const handleMenuClick = () => {
   opacity: 0.3;
 }
 .is-dark .switch-icon.moon {
-  color: #ffcc00;
+  color: var(--status-warning);
 }
 
 /* Thumb circular */
@@ -360,15 +345,15 @@ const handleMenuClick = () => {
   height: 20px;
   border-radius: 50%;
   background: var(--primary-green);
-  box-shadow: 0 0 8px rgba(52, 199, 89, 0.5);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--primary-green) 50%, transparent);
   transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   z-index: 2;
 }
 
 .is-dark .switch-thumb {
   transform: translateX(calc(100% + 2px));
-  background: #66d9ff;
-  box-shadow: 0 0 12px rgba(102, 217, 255, 0.6);
+  background: var(--primary-green);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--primary-green) 50%, transparent);
 }
 
 .switch-label {

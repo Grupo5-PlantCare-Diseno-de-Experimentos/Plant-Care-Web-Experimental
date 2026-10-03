@@ -127,10 +127,8 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap');
-
 /* ----------------------------------------------------------
-   DASHBOARD – Diseño glass futurista con efectos “wow”
+   DASHBOARD – Glass sobre los tokens globales
    ---------------------------------------------------------- */
 .dashboard {
   max-width: 1400px;
@@ -138,7 +136,6 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
   position: relative;
   isolation: isolate;
   padding: 1rem;
-  font-family: 'Space Grotesk', sans-serif;
   color: var(--text-primary);
 }
 
@@ -149,10 +146,10 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
   z-index: -1;
   pointer-events: none;
   opacity: 0.4;
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(52, 199, 89, 0.15) 0%, transparent 30%),
-    radial-gradient(circle at 80% 70%, rgba(102, 217, 255, 0.1) 0%, transparent 35%),
-    radial-gradient(circle at 40% 80%, rgba(52, 199, 89, 0.08) 0%, transparent 40%);
+  background-image:
+    radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--primary-green) 15%, transparent) 0%, transparent 30%),
+    radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--status-info) 10%, transparent) 0%, transparent 35%),
+    radial-gradient(circle at 40% 80%, color-mix(in srgb, var(--primary-green) 8%, transparent) 0%, transparent 40%);
   animation: particleFloat 12s infinite alternate ease-in-out;
 }
 
@@ -168,24 +165,23 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 4rem;
+  padding: var(--spacing-2xl);
   text-align: center;
   color: var(--text-secondary);
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-color);
   backdrop-filter: blur(20px);
-  font-family: 'Space Grotesk', sans-serif;
 }
 
 .loading-spinner {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #cffef5, #74dbff);
+  background: var(--surface-muted);
+  border: 1px solid var(--border-color);
   display: grid;
   place-items: center;
-  box-shadow: 0 0 20px rgba(102, 217, 255, 0.3);
   animation: spin 1.5s linear infinite;
 }
 
@@ -214,7 +210,6 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
 }
 
 .section-title {
-  font-family: 'Sora', sans-serif;
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
@@ -264,7 +259,7 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, var(--primary-green), #66d9ff, var(--primary-green), transparent);
+  background: linear-gradient(90deg, transparent, var(--primary-green), var(--secondary-green), var(--primary-green), transparent);
   opacity: 0;
   transition: opacity 0.4s;
   box-shadow: 0 0 12px var(--primary-green);
@@ -299,12 +294,12 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
   font-size: 28px;
   box-shadow: var(--shadow-green);
   transition: all 0.3s ease;
-  color: var(--text-inverse);
+  color: #fff;
 }
 
 .stat-card:hover .stat-icon {
   transform: rotate(10deg) scale(1.1);
-  box-shadow: 0 0 20px rgba(52, 199, 89, 0.6);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--primary-green) 60%, transparent);
 }
 
 .stat-value {
@@ -356,8 +351,8 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
   background: var(--gradient-primary);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
-  color: var(--text-inverse);
-  box-shadow: 0 12px 32px rgba(52, 199, 89, 0.35);
+  color: #fff;
+  box-shadow: var(--shadow-green);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -390,7 +385,7 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
 
 .next-watering-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(52, 199, 89, 0.45);
+  box-shadow: var(--shadow-green);
 }
 
 .next-watering-content {
@@ -423,24 +418,23 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
 }
 
 .next-watering-button {
-  background: var(--text-inverse) !important;
-  color: var(--primary-green) !important;
-  padding: 14px 32px !important;
-  border-radius: var(--radius-lg) !important;
-  border: none !important;
-  font-weight: var(--font-weight-bold) !important;
-  font-size: var(--font-size-base) !important;
+  background: #fff;
+  color: var(--primary-green);
+  padding: 14px 32px;
+  border-radius: var(--radius-lg);
+  border: none;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
   cursor: pointer;
-  transition: all 0.3s ease !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
   position: relative;
   z-index: 2;
-  font-family: 'Space Grotesk', sans-serif;
 }
 
 .next-watering-button:hover {
-  transform: translateY(-2px) scale(1.05) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-md);
 }
 
 /* ----------------------------------------------------------
@@ -507,14 +501,14 @@ const getActivityIcon = (type: string) => activityIcons[type] || activityIcons.c
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
-  color: var(--text-inverse);
+  color: #fff;
   position: relative;
   z-index: 2;
 }
 
 .activity-item:hover .activity-icon {
   transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 0 16px rgba(52, 199, 89, 0.5);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--primary-green) 50%, transparent);
 }
 
 .activity-content {

@@ -27,6 +27,7 @@ export interface Plant {
   bio: string;
   location: string;
   status: PlantStatus;
+  deviceId?: string | null;
   lastWatered: string;
   nextWatering: string;
   metrics: Metric[];

@@ -141,8 +141,8 @@ const getDaysAgo = (dateStr: string): string => {
 .stats-header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #1f2937;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
 }
 
 .stats-grid {
@@ -152,9 +152,9 @@ const getDaysAgo = (dateStr: string): string => {
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg-card) 80%, transparent);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -165,7 +165,7 @@ const getDaysAgo = (dateStr: string): string => {
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-icon {
@@ -176,16 +176,16 @@ const getDaysAgo = (dateStr: string): string => {
 .stat-value {
   display: block;
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #1e8e71;
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-green);
   margin-bottom: 0.25rem;
 }
 
 .stat-label {
   display: block;
   font-size: 0.75rem;
-  color: #6b7280;
-  font-weight: 600;
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -194,8 +194,8 @@ const getDaysAgo = (dateStr: string): string => {
 .summary-section h4 {
   margin: 0 0 1rem;
   font-size: 1rem;
-  color: #1f2937;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
 }
 
 .timeline {
@@ -210,7 +210,7 @@ const getDaysAgo = (dateStr: string): string => {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, #a0ffd7, #66d9ff);
+  background: var(--gradient-primary);
 }
 
 .timeline-item {
@@ -228,12 +228,12 @@ const getDaysAgo = (dateStr: string): string => {
 
 .marker-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #a0ffd7, #66d9ff);
-  color: #042c3d;
+  background: var(--gradient-primary);
+  color: #fff;
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
 }
 
@@ -242,41 +242,41 @@ const getDaysAgo = (dateStr: string): string => {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: white;
-  border: 3px solid #a0ffd7;
+  background: var(--bg-secondary);
+  border: 3px solid var(--primary-green);
 }
 
 .timeline-content {
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 8px;
-  border-left: 3px solid #a0ffd7;
+  background: color-mix(in srgb, var(--bg-card) 70%, transparent);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary-green);
 }
 
 .timeline-date {
   margin: 0;
   font-size: 0.9rem;
-  font-weight: 600;
-  color: #1f2937;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
 }
 
 .timeline-ago {
   margin: 0.25rem 0 0;
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .empty-logs {
   padding: 2rem;
   text-align: center;
-  background: rgba(160, 255, 215, 0.1);
-  border-radius: 10px;
-  border: 1px dashed #a0ffd7;
+  background: var(--primary-green-light);
+  border-radius: var(--radius-md);
+  border: 1px dashed color-mix(in srgb, var(--primary-green) 55%, transparent);
 }
 
 .empty-logs p {
   margin: 0;
-  color: #4b5563;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -291,9 +291,9 @@ const getDaysAgo = (dateStr: string): string => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 8px;
-  border-left: 3px solid #66d9ff;
+  background: color-mix(in srgb, var(--bg-card) 70%, transparent);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--status-info);
 }
 
 .summary-icon {
@@ -302,12 +302,12 @@ const getDaysAgo = (dateStr: string): string => {
 
 .summary-text {
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-secondary);
 }
 
 .summary-text strong {
-  color: #1e8e71;
-  font-weight: 700;
+  color: var(--primary-green);
+  font-weight: var(--font-weight-bold);
 }
 
 @media (max-width: 768px) {

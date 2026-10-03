@@ -8,7 +8,6 @@ import ProgressSpinner from 'primevue/progressspinner';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { PlantsService } from '../../infrastructure/plants.services';
-import { AnalyticsService } from '../../../analytics/infrastructure/analytics.service';
 import { useAuthStore } from '../../../auth/store/authStore';
 import type { Metric, Plant as PlantEntity } from '../../domain/model/plants.entity';
 import type { SensorData } from '../../../analytics/domain/model/analytics.entity';
@@ -19,26 +18,23 @@ import { evaluateCriticalAlert, resetAlertState } from '../../../experiments/dis
 const router = useRouter();
 const route = useRoute();
 const plantsService = new PlantsService();
-const analyticsService = new AnalyticsService();
 const authStore = useAuthStore();
 const confirm = useConfirm();
 const toast = useToast();
 const { t, locale } = useI18n();
 
 const plant = ref<PlantEntity | null>(null);
-const generalMetrics = ref<SensorData[]>([]);
 const isLoading = ref(true);
 const isWatering = ref(false);
 const plantId = Number(route.params.id);
 
+/** Hay sensor cuando la planta tiene un dispositivo emparejado. */
+const hasSensor = computed(() => Boolean(plant.value?.deviceId));
+
 onMounted(async () => {
   try {
-    const [plantResponse, metricsResponse] = await Promise.all([
-      plantsService.getPlantById(plantId),
-      analyticsService.getAllSensorData()
-    ]);
+    const plantResponse = await plantsService.getPlantById(plantId);
     plant.value = plantResponse.data;
-    generalMetrics.value = metricsResponse.data;
     // EC-01: evalúa si la última lectura dispara una alerta crítica a Discord.
     void evaluateAlert();
   } catch (err) {
@@ -83,13 +79,9 @@ const getTimestamp = (source: MetricSource): string | null => {
 
 const latestMetric = computed(() => {
   const plantMetrics = plant.value?.metrics ?? [];
-  const metricSource: MetricSource[] = plantMetrics.length > 0
-    ? plantMetrics
-    : generalMetrics.value;
+  if (plantMetrics.length === 0) return null;
 
-  if (metricSource.length === 0) return null;
-
-  const sorted = [...metricSource].sort((a, b) =>
+  const sorted = [...plantMetrics].sort((a, b) =>
     new Date(getTimestamp(b) ?? '').getTime() - new Date(getTimestamp(a) ?? '').getTime()
   );
   const raw = sorted[0];
@@ -191,9 +183,9 @@ function formatDate(dateStr: string | null): string {
             <div class="pd-hero__veil"></div>
 
             <!-- Live badge -->
-            <div class="pd-live-badge">
+            <div class="pd-live-badge" :class="{ 'pd-live-badge--off': !hasSensor }">
               <span class="pd-live-badge__dot"></span>
-              {{ t('plantDetail.live') }}
+              {{ hasSensor ? t('plantDetail.live') : t('plantDetail.noSensor') }}
             </div>
 
             <!-- Overlaid plant identity -->
@@ -210,10 +202,16 @@ function formatDate(dateStr: string | null): string {
           <!-- Bio section -->
           <div class="pd-hero__bio-block">
             <p class="pd-hero__bio">{{ plant.bio }}</p>
-            <span class="pd-connected-chip">
-              <i class="pi pi-leaf"></i>
-              {{ t('plantDetail.connectedProfile') }}
-            </span>
+            <div class="pd-hero__chips">
+              <span class="pd-connected-chip">
+                <i class="pi pi-leaf"></i>
+                {{ t('plantDetail.connectedProfile') }}
+              </span>
+              <span class="pd-sensor-chip" :class="{ 'is-off': !hasSensor }">
+                <i class="pi pi-wifi"></i>
+                {{ hasSensor ? plant.deviceId : t('plantDetail.noSensor') }}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -534,6 +532,12 @@ function formatDate(dateStr: string | null): string {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+.pd-live-badge--off .pd-live-badge__dot {
+  background: var(--text-tertiary);
+  box-shadow: none;
+  animation: none;
+}
+
 /* Identity overlay on image bottom */
 .pd-hero__identity {
   position: absolute;
@@ -608,6 +612,37 @@ function formatDate(dateStr: string | null): string {
 }
 
 .pd-connected-chip i {
+  font-size: 11px;
+}
+
+.pd-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.pd-sensor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: var(--surface-info-soft);
+  border: 1px solid color-mix(in srgb, var(--status-info) 25%, transparent);
+  color: var(--status-info);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pd-sensor-chip.is-off {
+  background: var(--surface-muted);
+  border-color: var(--border-color);
+  color: var(--text-tertiary);
+}
+
+.pd-sensor-chip i {
   font-size: 11px;
 }
 
@@ -709,8 +744,8 @@ function formatDate(dateStr: string | null): string {
 
 /* Color variants for icon backgrounds */
 .pd-metric-card--temp .pd-metric-card__icon {
-  background: rgba(255, 149, 0, 0.15);
-  color: #ff9500;
+  background: var(--surface-warning-soft);
+  color: var(--metric-temperature);
 }
 
 .pd-metric-card--humidity .pd-metric-card__icon {
@@ -719,13 +754,13 @@ function formatDate(dateStr: string | null): string {
 }
 
 .pd-metric-card--light .pd-metric-card__icon {
-  background: rgba(255, 204, 0, 0.15);
-  color: #ffcc00;
+  background: color-mix(in srgb, var(--metric-light) 15%, transparent);
+  color: var(--metric-light);
 }
 
 .pd-metric-card--soil .pd-metric-card__icon {
-  background: rgba(134, 106, 90, 0.15);
-  color: #a0856e;
+  background: color-mix(in srgb, var(--metric-soil) 15%, transparent);
+  color: var(--metric-soil);
 }
 
 .pd-metric-card__label {

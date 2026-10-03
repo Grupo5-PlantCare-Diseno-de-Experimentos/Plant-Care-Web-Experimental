@@ -166,7 +166,7 @@ onBeforeUnmount(() => {
 
 .router-content {
   margin-top: var(--header-height);
-  padding: 24px;
+  padding: var(--spacing-lg);
 }
 
 .app-layout.sidebar-collapsed .main-content {
@@ -180,7 +180,7 @@ onBeforeUnmount(() => {
 .sidebar-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(10, 12, 16, 0.45);
+  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(2px);
   z-index: 115;
   border: none;

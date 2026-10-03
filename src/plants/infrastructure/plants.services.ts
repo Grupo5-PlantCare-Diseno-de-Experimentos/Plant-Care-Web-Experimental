@@ -14,6 +14,7 @@ type PlantRow = Record<string, unknown> & {
   bio?: string | null;
   location?: string | null;
   status?: Plant['status'] | null;
+  device_id?: string | null;
   last_watered?: string | null;
   next_watering?: string | null;
   metrics?: PlantMetricRow[] | null;
@@ -64,7 +65,7 @@ export class PlantsService {
     return { data: this.mapToDomain(data as PlantRow) };
   }
 
-  async createPlant(plantResource: { userId: string; name: string; type: string; imgUrl?: string; bio?: string; location?: string; }) {
+  async createPlant(plantResource: { userId: string; name: string; type: string; imgUrl?: string; bio?: string; location?: string; deviceId?: string | null; }) {
     assertValidUserId(plantResource.userId, 'createPlant');
 
     const body = {
@@ -85,7 +86,14 @@ export class PlantsService {
       .single();
 
     if (error) throw error;
-    return { data: this.mapToDomain(data as PlantRow) };
+
+    const created = this.mapToDomain(data as PlantRow);
+    const deviceId = (plantResource.deviceId || '').trim();
+    if (deviceId) {
+      await this.pairDevice(created.id, deviceId);
+      created.deviceId = deviceId;
+    }
+    return { data: created };
   }
 
   async updatePlant(plantId: number | string, plantResource: Partial<Plant>) {
@@ -107,7 +115,68 @@ export class PlantsService {
       .single();
 
     if (error) throw error;
-    return { data: this.mapToDomain(data as PlantRow) };
+
+    const mapped = this.mapToDomain(data as PlantRow);
+    if (plantResource.deviceId !== undefined) {
+      const deviceId = (plantResource.deviceId || '').trim();
+      if (deviceId) {
+        await this.pairDevice(plantId, deviceId);
+        mapped.deviceId = deviceId;
+      } else {
+        await this.unpairDevice(plantId);
+        mapped.deviceId = null;
+      }
+    }
+    return { data: mapped };
+  }
+
+  /**
+   * Sensores ya detectados: enviaron lecturas sin planta asociada.
+   */
+  async getDetectedDevices(): Promise<Array<{ deviceId: string; lastSeen: string | null }>> {
+    const { data, error } = await supabase
+      .from('plant_metrics')
+      .select('device_id, timestamp')
+      .is('plant_id', null)
+      .not('device_id', 'is', null)
+      .order('timestamp', { ascending: false })
+      .limit(200);
+
+    if (error) throw error;
+
+    const seen = new Map<string, string | null>();
+    ((data || []) as Array<Record<string, unknown>>).forEach((row) => {
+      const deviceId = toNullableString(row.device_id);
+      if (!deviceId || seen.has(deviceId)) return;
+      seen.set(deviceId, toNullableString(row.timestamp));
+    });
+
+    return Array.from(seen, ([deviceId, lastSeen]) => ({ deviceId, lastSeen }));
+  }
+
+  /**
+   * Empareja un sensor con una planta. Si ya estaba en otra, la función SQL
+   * lo mueve y reasigna sus lecturas recientes.
+   */
+  async pairDevice(plantId: number | string, deviceId: string) {
+    assertValidPlantId(plantId, 'pairDevice');
+    const { error } = await supabase.rpc('pair_device', {
+      p_plant_id: Number(plantId),
+      p_device_id: deviceId,
+    });
+    if (error) throw error;
+    return { success: true };
+  }
+
+  /** Desvincula el sensor de la planta. */
+  async unpairDevice(plantId: number | string) {
+    assertValidPlantId(plantId, 'unpairDevice');
+    const { error } = await supabase
+      .from('plants')
+      .update({ device_id: null })
+      .eq('id', plantId);
+    if (error) throw error;
+    return { success: true };
   }
 
   async deletePlant(plantId: number | string) {
@@ -197,6 +266,7 @@ export class PlantsService {
       bio: row.bio || '',
       location: row.location || '',
       status: row.status || 'healthy',
+      deviceId: toNullableString(row.device_id ?? row.deviceId),
       lastWatered: row.last_watered || '',
       metrics,
       wateringLogs: (row.watering_logs || []).map((log) => ({
